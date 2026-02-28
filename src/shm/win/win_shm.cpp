@@ -1,0 +1,149 @@
+#if defined(MOO_WIN32)
+
+#include "shm/shm.h"
+#include "windows_hdr.h"
+
+namespace shm {
+    // static HANDLE as_native(shm_handle h) noexcept {
+    //     return static_cast<HANDLE>(h);
+    // }
+
+    // static shm_handle from_native(HANDLE fd) noexcept {
+    //     return static_cast<shm_handle>(fd);
+    // }
+
+    static std::wstring to_windows_wstring(const std::string& s) {
+        if (s.empty()) return {};
+
+        int len = ::MultiByteToWideChar(CP_UTF8, 0, s.data(), static_cast<int>(s.size()), nullptr, 0);
+        if (len <= 0) return {};
+
+        std::wstring out(static_cast<size_t>(len), L'\0');
+        ::MultiByteToWideChar(CP_UTF8, 0, s.data(), static_cast<int>(s.size()), out.data(), len);
+        return out;
+    }
+
+    Shm::Shm(const int32_t id, const size_t total_size) : 
+        m_id(id), m_total_size(total_size), m_handle(nullptr), m_view(nullptr) {}
+
+    Shm::Shm(Shm&& other) noexcept : 
+        m_id(other.m_id),
+        m_total_size(other.m_total_size),
+        m_handle(other.m_handle),
+        m_view(other.m_view) {
+
+        other.m_handle = nullptr;
+        other.m_view   = nullptr;
+        other.m_id  = -1;
+        other.m_total_size = 0;
+    }
+
+    Shm& Shm::operator=(Shm&& other) noexcept {
+        if (this != &other) {
+            close();
+
+            m_id = other.m_id;
+            m_total_size = other.m_total_size;
+            m_handle = other.m_handle;
+            m_view = other.m_view;
+
+            other.m_handle = nullptr;
+            other.m_view = nullptr;
+            other.m_id = -1;
+            other.m_total_size = 0;
+        }
+        return *this;
+    }
+
+    bool Shm::is_valid() const noexcept {
+        return m_handle != nullptr && m_view != nullptr;
+    }
+
+    std::string Shm::name() const noexcept {
+        // cross session, but need admin rights
+        //return "Global\\eroil.node." + std::to_string(m_id);
+
+        // local session only
+        return "Local\\eroil.node." + std::to_string(m_id);
+    }
+
+    ShmResult Shm::create() {
+        if (is_valid()) return { ShmErr::DoubleOpen, ShmOp::Create };
+
+        std::wstring wname = to_windows_wstring(name());
+        if (wname.empty()) {
+            return { ShmErr::InvalidName, ShmOp::Create };
+        }
+
+        m_handle = ::CreateFileMappingW(
+            INVALID_HANDLE_VALUE,
+            nullptr,
+            PAGE_READWRITE,
+            0,
+            static_cast<DWORD>(total_size()),
+            wname.c_str()
+        );
+
+        if (m_handle == nullptr) {
+            close();
+            return { ShmErr::UnknownError, ShmOp::Create };
+        }
+
+        if (::GetLastError() == ERROR_ALREADY_EXISTS) {
+            close();
+            return { ShmErr::AlreadyExists, ShmOp::Create };
+        }
+
+        m_view = ::MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+        if (m_view == nullptr) {
+            close();
+            return { ShmErr::FileMapFailed, ShmOp::Create };
+        }
+ 
+        return { ShmErr::None, ShmOp::Create };
+    }
+
+    ShmResult Shm::open() {
+        if (is_valid()) return { ShmErr::DoubleOpen, ShmOp::Open };
+
+        std::wstring wname = to_windows_wstring(name());
+        if (wname.empty()) {
+            return { ShmErr::InvalidName, ShmOp::Open };
+        }
+
+         m_handle = ::OpenFileMappingW(
+            FILE_MAP_ALL_ACCESS,
+            FALSE,
+            wname.c_str()
+        );
+
+        if (m_handle == nullptr) {
+            DWORD e = ::GetLastError();
+            if (e == ERROR_FILE_NOT_FOUND) return { ShmErr::DoesNotExist, ShmOp::Open };
+            return { ShmErr::UnknownError, ShmOp::Open };
+        }
+
+        m_view = ::MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+        if (m_view == nullptr) {
+            close();
+            m_handle = nullptr;
+            return { ShmErr::FileMapFailed, ShmOp::Open };
+        }
+   
+        return { ShmErr::None, ShmOp::Open };
+    }
+
+    void Shm::close() noexcept {
+        if (m_view != nullptr) {
+            ::UnmapViewOfFile(m_view);
+            m_view = nullptr;
+        }
+
+        if (m_handle != nullptr) {
+            ::CloseHandle(m_handle);
+            m_handle = nullptr;
+        }
+    }
+}
+
+#endif

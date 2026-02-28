@@ -1,0 +1,144 @@
+#if defined(MOO_LINUX)
+#include "shm/shm.h"
+
+#include <fcntl.h>      // shm_open, O_*
+#include <sys/mman.h>   // mmap, munmap, PROT_*, MAP_*
+#include <sys/stat.h>   // mode_t
+#include <unistd.h>     // ftruncate, close
+#include <cerrno>
+
+namespace shm {
+    // static int as_native(shm_handle h) noexcept {
+    //     return static_cast<int>(h);
+    // }
+
+    // static shm_handle from_native(int fd) noexcept {
+    //     return static_cast<shm_handle>(fd);
+    // }
+
+    Shm::Shm(const int32_t id, const size_t total_size) : 
+        m_id(id), m_total_size(total_size), m_handle(-1), m_view(nullptr) {}
+
+    Shm::Shm(Shm&& other) noexcept
+        : m_id(other.m_id),
+          m_total_size(other.m_total_size),
+          m_handle(other.m_handle),
+          m_view(other.m_view) {
+
+        other.m_handle = -1;
+        other.m_view   = nullptr;
+        other.m_id  = -1;
+        other.m_total_size = 0;
+    }
+
+    Shm& Shm::operator=(Shm&& other) noexcept {
+        if (this != &other) {
+            close();
+
+            m_id = other.m_id;
+            m_total_size = other.m_total_size;
+            m_handle = other.m_handle;
+            m_view = other.m_view;
+
+            other.m_handle = -1;
+            other.m_view = nullptr;
+            other.m_id = -1;
+            other.m_total_size = 0;
+        }
+        return *this;
+    }
+
+    bool Shm::is_valid() const noexcept {
+        return m_handle >= 0 && m_view != nullptr;
+    }
+
+    std::string Shm::name() const noexcept {
+        return "/eroil.node." + std::to_string(m_id);
+    }
+
+    ShmResult Shm::create() {
+        if (is_valid()) return { ShmErr::DoubleOpen, ShmOp::Create };
+
+        const std::string n = name();
+        if (n.empty() || n[0] != '/') {
+            return { ShmErr::InvalidName, ShmOp::Create };
+        }
+
+        // O_EXCL makes create fail if it already exists
+        m_handle = ::shm_open(n.c_str(), O_RDWR | O_CREAT | O_EXCL, 0777);
+        if (m_handle < 0) {
+            if (errno == EEXIST) return { ShmErr::AlreadyExists, ShmOp::Create };
+            return { ShmErr::UnknownError, ShmOp::Create };
+        }
+
+        const size_t total = total_size();
+        if (::ftruncate(m_handle, static_cast<off_t>(total)) != 0) {
+            ::close(m_handle);
+            ::shm_unlink(n.c_str()); // delete the partially created file
+            return { ShmErr::UnknownError, ShmOp::Create };
+        }
+
+        m_view = ::mmap(nullptr, total, PROT_READ | PROT_WRITE, MAP_SHARED, m_handle, 0);
+        if (m_view == MAP_FAILED) {
+            ::close(m_handle);
+            ::shm_unlink(n.c_str()); // delete the partially created file
+            return { ShmErr::FileMapFailed, ShmOp::Create };
+        }
+       
+        return { ShmErr::None, ShmOp::Create };
+    }
+
+    ShmResult Shm::open() {
+        if (is_valid()) return { ShmErr::DoubleOpen, ShmOp::Open };
+
+        const std::string n = name();
+        if (n.empty() || n[0] != '/') {
+            return { ShmErr::InvalidName, ShmOp::Open };
+        }
+
+        m_handle = ::shm_open(n.c_str(), O_RDWR, 0777);
+        if (m_handle < 0) {
+            if (errno == ENOENT) return { ShmErr::DoesNotExist, ShmOp::Open };
+            return { ShmErr::UnknownError, ShmOp::Open };
+        }
+
+        struct stat st;
+        if (fstat(m_handle, &st) != 0) {
+            ::close(m_handle);
+            return { ShmErr::UnknownError, ShmOp::Open };
+        }
+
+        if ( static_cast<size_t>(st.st_size) != total_size()) {
+            ::close(m_handle);
+            return { ShmErr::SizeMismatch, ShmOp::Open };
+        }
+
+        const size_t total = total_size();
+        m_view = ::mmap(nullptr, total, PROT_READ | PROT_WRITE, MAP_SHARED, m_handle, 0);
+        if (m_view == MAP_FAILED) {
+            ::close(m_handle);
+            return { ShmErr::FileMapFailed, ShmOp::Open };
+        }
+
+        return { ShmErr::None, ShmOp::Open };
+    }
+
+    void Shm::close() noexcept {
+        const size_t total = total_size();
+
+        if (m_view != nullptr) {
+            ::munmap(m_view, total);
+            m_view = nullptr;
+        }
+
+        if (m_handle >= 0) {
+            ::close(m_handle);
+            m_handle = -1;
+        }
+
+        // delete the shared memory file
+        //::shm_unlink(name().c_str());
+    }
+}
+
+#endif
