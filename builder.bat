@@ -14,7 +14,7 @@ rem     cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
 rem     cmake --build build --parallel
 rem ============================================================
 
-set PRESET=debug
+set PRESET=win-debug
 set BUILD_DIR=build
 set CLEAN=false
 set RUN_AFTER_BUILD=false
@@ -28,9 +28,9 @@ cls
     if /I "%~1"=="--run" (
         set RUN_AFTER_BUILD=true
     ) else if /I "%~1"=="--debug" (
-        set PRESET=debug
+        set PRESET=win-debug
     ) else if /I "%~1"=="--release" (
-        set PRESET=release
+        set PRESET=win-release
     ) else if /I "%~1"=="--clean" (
         set CLEAN=true
     ) else (
@@ -42,9 +42,10 @@ cls
     goto parse_args
 :after_args
 
-rem Optional clean
+rem ------ optional clean ------
 if "%CLEAN%"=="true" (
     if exist "%BUILD_DIR%" (
+        echo.
         echo Cleaning build directory "%BUILD_DIR%"...
         rmdir /s /q "%BUILD_DIR%"
         if errorlevel 1 (
@@ -52,14 +53,14 @@ if "%CLEAN%"=="true" (
             exit /b 1
         )
     ) else (
+        echo.
         echo Build directory "%BUILD_DIR%" does not exist, skipping clean
     )
 )
 
 echo.
 echo Running CMake configure preset "%PRESET%"
-cmake --preset %PRESET% -DEROIL_ELOG_ENABLED="%LOG%
-REM cmake --preset msvc-release
+cmake --preset %PRESET%
 
 if errorlevel 1 (
     echo CMake configuration failed
@@ -69,7 +70,6 @@ if errorlevel 1 (
 echo.
 echo Building project for preset "%PRESET%"
 cmake --build --preset %PRESET% --parallel
-REM cmake --build --preset release --config Release
 
 if errorlevel 1 (
     echo Build failed
@@ -89,4 +89,4 @@ echo Build completed successfully for preset "%PRESET%"
 @REM     )
 @REM )
 
-@REM endlocal
+endlocal

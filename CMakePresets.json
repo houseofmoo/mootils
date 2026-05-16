@@ -21,30 +21,21 @@
     },
 
     {
-      "name": "debug",
+      "name": "win-debug",
       "displayName": "Debug build",
       "description": "Builds in the 'build' directory using MinGW",
       "generator": "MinGW Makefiles",
-      "binaryDir": "${sourceDir}/build/debug",
+      "binaryDir": "${sourceDir}/build/win-debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
-      "name": "release",
+      "name": "win-release",
       "displayName": "Release build",
       "description": "Builds in the 'build' directory using MinGW",
       "generator": "MinGW Makefiles",
-      "binaryDir": "${sourceDir}/build/release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
-    },
-    {
-      "name": "msvc-release",
-      "generator": "Visual Studio 17 2022",
-      "architecture": "x64",
-      "binaryDir": "${sourceDir}/build/msvc-release",
+      "binaryDir": "${sourceDir}/build/win-release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
@@ -55,25 +46,27 @@
       "name": "linux-debug",
       "displayName": "Build Linux Debug",
       "configurePreset": "linux-debug",
+      "configuration": "Debug",
       "jobs": 0
     },
     {
       "name": "linux-release",
       "displayName": "Build Linux Release",
       "configurePreset": "linux-release",
+      "configuration": "Release",
       "jobs": 0
     },
     {
-      "name": "debug",
+      "name": "win-debug",
       "displayName": "Build Debug",
-      "configurePreset": "debug",
+      "configurePreset": "win-debug",
       "configuration": "Debug",
       "jobs": 0
     },
     {
-      "name": "release",
+      "name": "win-release",
       "displayName": "Build Release",
-      "configurePreset": "release",
+      "configurePreset": "win-release",
       "configuration": "Release",
       "jobs": 0
     }

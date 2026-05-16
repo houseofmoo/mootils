@@ -13,7 +13,7 @@
     #define FUNC_SIG __func__
 #endif
 
-namespace print {
+namespace prints {
     namespace detail {
         inline int32_t __id{0};
         inline std::mutex __mtx;

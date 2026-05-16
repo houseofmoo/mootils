@@ -45,6 +45,7 @@ target_sources(${PROJECT_NAME}
         #platform independent sources
         ${CMAKE_CURRENT_SOURCE_DIR}/src/root.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/shm/shm.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/print/print_q.cpp
 
         # windows only
         $<$<PLATFORM_ID:Windows>:
