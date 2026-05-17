@@ -33,11 +33,34 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS NO
 )
 
+# parse log level from arguments, error if not set
+set(LOG_LEVEL "Debug" CACHE STRING "Set log level (Debug, Info, Warning, Error, None)")
+set_property(CACHE LOG_LEVEL PROPERTY STRINGS "Debug" "Info" "Warning" "Error" "None")
+if(LOG_LEVEL STREQUAL "Debug")
+    message(INFO " Log level set to DEBUG")
+    set(LOG_LEVEL_VALUE 0)
+elseif(LOG_LEVEL STREQUAL "Info")
+    message(INFO " Log level set to INFO")
+    set(LOG_LEVEL_VALUE 1)
+elseif(LOG_LEVEL STREQUAL "Warning")
+    message(INFO " Log level set to WARNING")
+    set(LOG_LEVEL_VALUE 2)
+elseif(LOG_LEVEL STREQUAL "Error")
+    message(INFO " Log level set to ERROR")
+    set(LOG_LEVEL_VALUE 3)
+elseif(LOG_LEVEL STREQUAL "None")
+    message(INFO " Log level set to NONE")
+    set(LOG_LEVEL_VALUE 99)
+else()
+    message(FATAL_ERROR " Invalid LOG_LEVEL: ${LOG_LEVEL}. Use Debug, Info, Warning, Error, or None")
+endif()
+
 # macro defs
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         $<$<PLATFORM_ID:Windows>:MOO_WIN32>
         $<$<PLATFORM_ID:Linux>:MOO_LINUX>
+        LOG_LEVEL=${LOG_LEVEL_VALUE} 
 )
 
 # source files

@@ -61,6 +61,7 @@ if "%CLEAN%"=="true" (
 echo.
 echo Running CMake configure preset "%PRESET%"
 cmake --preset %PRESET%
+REM cmake --preset %PRESET% -DUSER_LOG_LEVEL="None"
 
 if errorlevel 1 (
     echo CMake configuration failed

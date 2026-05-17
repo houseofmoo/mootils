@@ -8,22 +8,38 @@
 
 namespace logr {
     struct Msg {
-        std::string_view src;
-        LogLvl lvl;
+        std::string src;
+        detail::LogLvl lvl;
         std::string text;
     };
 
     class Logger {
-        private:
+        public:
             std::mutex m_mtx;
             std::chrono::steady_clock::time_point m_start_time;
             std::condition_variable m_cv;
             std::queue<Msg> m_queue;
             bool m_stopping;
             std::thread m_worker;
+        
+            Logger() : 
+                m_mtx{}, 
+                m_start_time(std::chrono::steady_clock::now()),
+                m_cv{}, 
+                m_queue{},
+                m_stopping{false},
+                m_worker{[this]() { run(); }} {}
+
+            ~Logger() { shutdown(); }
+
+            Logger(const Logger&) = delete;
+            Logger& operator=(const Logger&) = delete;
+            Logger(Logger&&) = delete;
+            Logger& operator=(Logger&&) = delete;
 
             void run() {
-                std::queue<Msg> local; // local queue to swap between producer and consumer to minimize lock time
+                // local queue to swap between producer and consumer to minimize lock time
+                std::queue<Msg> local; 
 
                 while (true) {
                     {
@@ -31,14 +47,23 @@ namespace logr {
                         m_cv.wait(lock, [this]() { 
                             return m_stopping || !m_queue.empty(); 
                         });
-
                         if (m_stopping && m_queue.empty()) { break; }
-                        local.swap(m_queue); // swap contents so we can print without blocking producers
+                        // swap contents so we can print without blocking producers
+                        local.swap(m_queue); 
                     }
 
                     while (!local.empty()) {
                         Msg msg = std::move(local.front());
                         local.pop();
+
+                        std::string_view lvl = "UNKN";
+                        switch (msg.lvl) {
+                            case detail::LogLvl::Debug:   lvl = "DEBUG"; break;
+                            case detail::LogLvl::Info:    lvl = "INFO "; break;
+                            case detail::LogLvl::Warning: lvl = "WARN "; break;
+                            case detail::LogLvl::Error:   lvl = "ERROR"; break;
+                            case detail::LogLvl::None:    lvl = "NONE "; break;
+                        }
                         
                         auto ms = static_cast<std::uint64_t>(
                             std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -46,8 +71,10 @@ namespace logr {
                             ).count()
                         );
 
-                        auto& out = msg.lvl == LogLvl::Error ? std::cerr : std::cout;
-                        out << "[ " << ms << " | " << msg.src << "] " << msg.text << "\n";
+                        auto& out = msg.lvl == detail::LogLvl::Warning || 
+                                    msg.lvl == detail::LogLvl::Error
+                                    ? std::cerr : std::cout;
+                        out << "[ " << ms << "ms | " << lvl << " ] " << msg.src << ": " << msg.text << "\n";
                     }
 
                     std::cout.flush();
@@ -66,37 +93,24 @@ namespace logr {
                     m_worker.join();
                 }
             }
-        
-        public:
-            Logger() : 
-                m_mtx{}, 
-                m_start_time(std::chrono::steady_clock::now()),
-                m_cv{}, 
-                m_queue{},
-                m_stopping{false},
-                m_worker{[this]() { run(); }} {}
-
-            ~Logger() { shutdown(); }
-
-            Logger(const Logger&) = delete;
-            Logger& operator=(const Logger&) = delete;
-            Logger(Logger&&) = delete;
-            Logger& operator=(Logger&&) = delete;
-
-            void enqueue(const std::string_view src, const LogLvl lvl, std::string msg) {
-                {
-                    std::lock_guard<std::mutex> lock(m_mtx);
-                    if (m_stopping) { return; }
-                    m_queue.push(Msg{ src, lvl, std::move(msg) });
-                }
-                m_cv.notify_one();
-            }
     };
-    static Logger logger{};
 
     namespace detail {
-        void enqueue(const std::string_view src, const LogLvl lvl, std::string msg) { 
-            logger.enqueue(src,lvl, std::move(msg));
+        logr::Logger& instance() {
+            static logr::Logger logger{};
+            return logger;
+        }
+
+        void enqueue(std::string src, LogLvl lvl, std::string msg) {
+            auto& logger = instance();
+            {
+                std::lock_guard<std::mutex> lock(logger.m_mtx);
+                if (logger.m_stopping) { return; }
+                logger.m_queue.push(
+                    Msg{ std::move(src), lvl, std::move(msg) }
+                );
+            }
+            logger.m_cv.notify_one();
         }
     }
 }

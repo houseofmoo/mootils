@@ -7,7 +7,8 @@
       "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/build/linux-debug",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "LOG_LEVEL": "Debug"
       }
     },
     {
@@ -16,10 +17,10 @@
       "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/build/linux-release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "LOG_LEVEL": "Warning"
       }
     },
-
     {
       "name": "win-debug",
       "displayName": "Debug build",
@@ -27,7 +28,8 @@
       "generator": "MinGW Makefiles",
       "binaryDir": "${sourceDir}/build/win-debug",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "LOG_LEVEL": "Debug"
       }
     },
     {
@@ -37,7 +39,8 @@
       "generator": "MinGW Makefiles",
       "binaryDir": "${sourceDir}/build/win-release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "LOG_LEVEL": "Warning"
       }
     }
   ],
