@@ -28,7 +28,9 @@ namespace logr {
                 m_cv{}, 
                 m_queue{},
                 m_stopping{false},
-                m_worker{[this]() { run(); }} {}
+                m_worker{[this]() { run(); }} {
+                    std::cout << "Logger started" << std::endl;
+                }
 
             ~Logger() { shutdown(); }
 
@@ -58,11 +60,11 @@ namespace logr {
 
                         std::string_view lvl = "UNKN";
                         switch (msg.lvl) {
-                            case detail::LogLvl::Debug:   lvl = "DEBUG"; break;
-                            case detail::LogLvl::Info:    lvl = "INFO "; break;
-                            case detail::LogLvl::Warning: lvl = "WARN "; break;
-                            case detail::LogLvl::Error:   lvl = "ERROR"; break;
-                            case detail::LogLvl::None:    lvl = "NONE "; break;
+                            case detail::LogLvl::Debug:   lvl = "DBG"; break;
+                            case detail::LogLvl::Info:    lvl = "INF"; break;
+                            case detail::LogLvl::Warning: lvl = "WRN"; break;
+                            case detail::LogLvl::Error:   lvl = "ERR"; break;
+                            case detail::LogLvl::None:    lvl = "NON"; break;
                         }
                         
                         auto ms = static_cast<std::uint64_t>(
@@ -74,7 +76,7 @@ namespace logr {
                         auto& out = msg.lvl == detail::LogLvl::Warning || 
                                     msg.lvl == detail::LogLvl::Error
                                     ? std::cerr : std::cout;
-                        out << "[ " << ms << "ms | " << lvl << " ] " << msg.src << ": " << msg.text << "\n";
+                        out << " " << ms << "ms " << lvl << " "<< msg.src << ": " << msg.text << "\n";
                     }
 
                     std::cout.flush();
