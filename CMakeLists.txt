@@ -35,7 +35,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 # parse log level from arguments, error if not set
 set(LOG_LEVEL "Debug" CACHE STRING "Set log level (Debug, Info, Warning, Error, None)")
-set_property(CACHE LOG_LEVEL PROPERTY STRINGS "Debug" "Info" "Warning" "Error" "None")
+set_property(CACHE LOG_LEVEL PROPERTY STRINGS Debug Info Warning Error None)
 if(LOG_LEVEL STREQUAL "Debug")
     message(INFO " Log level set to DEBUG")
     set(LOG_LEVEL_VALUE 0)
