@@ -18,7 +18,7 @@ project(mootils_lib LANGUAGES C CXX)
 # message(STATUS "==============================")
 # message(STATUS "")
 
-# build as static lib
+# build as lib
 #add_library(${PROJECT_NAME} STATIC)
 add_library(${PROJECT_NAME} SHARED)
 add_library(util::mootils ALIAS ${PROJECT_NAME})
