@@ -30,9 +30,10 @@ namespace logr {
                 m_stopping{false},
                 m_worker{[this]() { run(); }} {
                     std::cout << "[ LOGGER ] started: " << std::endl;
+                    m_worker.detach();
                 }
 
-            ~Logger() {  shutdown(); }
+            ~Logger() { shutdown(); }
 
             Logger(const Logger&) = delete;
             Logger& operator=(const Logger&) = delete;
