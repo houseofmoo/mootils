@@ -25,14 +25,14 @@ inline void do_nothing() {
 
     auto push_result = producer.push(42);
     if (!push_result) {
-        std::cerr << "Failed to push item to channel\n";
+        logr::error("CNSMR", "Failed to push item to channel");
     }
 
     auto pop_result = consumer.pop();
     if (pop_result) {
-        std::cout << "Popped item: " << pop_result.value() << "\n";
+        logr::info("CNSMR", "Popped item: ", pop_result.value());
     } else {
-        std::cerr << "Failed to pop item from channel\n";
+        logr::error("CNSMR", "Failed to pop item from channel");
     }
 
 
@@ -45,21 +45,23 @@ inline void do_nothing() {
 
     auto broadcast_push_result = broadcast_producer.push(99);
     if (!broadcast_push_result) {
-        std::cerr << "Failed to push item to broadcast channel\n";
+        logr::error("PRDCR", "Failed to push item to broadcast channel");
     }
 
     auto broadcast_pop_result = broadcast_consumer.pop();
     if (broadcast_pop_result) {
-        std::cout << "Popped item from broadcast channel: " << broadcast_pop_result.value() << "\n";
+        logr::info("PRDCR", "Popped item from broadcast channel: ", broadcast_pop_result.value());
     } else {
-        std::cerr << "Failed to pop item from broadcast channel\n";
+        logr::error("PRDCR", "Failed to pop item from broadcast channel");
     }
 
     evt::Event<int> OnMessage;
     const auto sub = OnMessage.subscribe([](int x){
-        std::cout << x << std::endl;
+        logr::info("MSG", "Received message: ", x);
     });
 
     OnMessage.emit(42);
+
+
 
 }

@@ -19,7 +19,8 @@ message(STATUS "==============================")
 message(STATUS "")
 
 # build as static lib
-add_library(${PROJECT_NAME} STATIC)
+#add_library(${PROJECT_NAME} STATIC)
+add_library(${PROJECT_NAME} SHARED)
 
 # require language standards per-target
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
