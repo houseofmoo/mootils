@@ -60,7 +60,8 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         $<$<PLATFORM_ID:Windows>:MOO_WIN32>
         $<$<PLATFORM_ID:Linux>:MOO_LINUX>
-        LOG_LEVEL=${LOG_LEVEL_VALUE} 
+    PUBLIC
+        LOGQ_LOG_LEVEL=${LOG_LEVEL_VALUE} 
 )
 
 # source files

@@ -16,19 +16,19 @@ namespace logr {
             None = 99, // disable all logging
         };
 
-        #if !defined(LOG_LEVEL)
-            //#pragma message("DEFAULT LOG LEVEL: DEBUG")
+        #if !defined(LOGQ_LOG_LEVEL)
+            #pragma message("DEFAULT LOG LEVEL: DEBUG")
             inline constexpr LogLvl compile_time_min_level = LogLvl::Debug;
         #else
             static_assert(
-                LOG_LEVEL == 0 || 
-                LOG_LEVEL == 1 || 
-                LOG_LEVEL == 2 || 
-                LOG_LEVEL == 3 || 
-                LOG_LEVEL == 99, 
-                "Invalid LOG_LEVEL. Use 0 (Debug), 1 (Info), 2 (Warning), 3 (Error), or 99 (None)"
+                LOGQ_LOG_LEVEL == 0 || 
+                LOGQ_LOG_LEVEL == 1 || 
+                LOGQ_LOG_LEVEL == 2 || 
+                LOGQ_LOG_LEVEL == 3 || 
+                LOGQ_LOG_LEVEL == 99, 
+                "Invalid LOGQ_LOG_LEVEL. Use 0 (Debug), 1 (Info), 2 (Warning), 3 (Error), or 99 (None)"
             );
-            inline constexpr LogLvl compile_time_min_level = static_cast<LogLvl>(LOG_LEVEL);
+            inline constexpr LogLvl compile_time_min_level = static_cast<LogLvl>(LOGQ_LOG_LEVEL);
         #endif
 
         void enqueue(std::string src, LogLvl lvl, std::string msg);
