@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "attach",
       "processId": "${command:pickProcess}",
-      "program": "${workspaceFolder}\\build\\debug\\bin\\eROIL_Tests.exe",
+      "program": "${workspaceFolder}\\build\\win-debug\\bin\\mootils_tests.exe",
       "MIMode": "gdb",
       "miDebuggerPath": "C:\\msys64\\ucrt64\\debug\\bin\\gdb.exe",
       "setupCommands": [
@@ -18,7 +18,7 @@
       "name": "(gdb) Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}\\build\\debug\\bin\\eROIL_Tests.exe",
+      "program": "${workspaceFolder}\\build\\win-debug\\bin\\mootils_tests.exe",
       "args": ["1"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

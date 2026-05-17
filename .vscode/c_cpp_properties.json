@@ -6,8 +6,9 @@
                 "${default}",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/src/**",
-                "${workspaceFolder}/include/**"
+                "${workspaceFolder}/lib/src/**",
+                "${workspaceFolder}/lib/include/**",
+                "${workspaceFolder}/tests/src/**"
             ],
             "windowsSdkVersion": "10.0.26100.0",
             "intelliSenseMode": "windows-msvc-x64",
