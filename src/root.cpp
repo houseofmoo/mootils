@@ -7,7 +7,7 @@
 #include "evt/semaphore.h"
 #include "platform/platform.h"
 #include "print/print_safe.h"
-#include "print/print_q.h"
+#include "print/log_q.h"
 #include "shm/shm.h"
 #include "sock/socket_context.h"
 #include "sock/socket_result.h"

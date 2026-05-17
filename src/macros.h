@@ -38,10 +38,10 @@
 #endif
 
 // debug assertion
-#if !defined(NDEBUG) // debug 
-    #define DB_ASSERT(expr, msg) assert((expr) && (msg))
-#else
+#if defined(NDEBUG) // release
     #define DB_ASSERT(expr, msg) do { (void)0; } while (0)
+#else
+    #define DB_ASSERT(expr, msg) assert((expr) && (msg))
 #endif
 
 // warning conversion surpression (DONT ABUSE!)
@@ -59,4 +59,23 @@
     #define DIAG_PUSH
     #define DIAG_POP
     #define DIAG_IGN_CONV
+#endif
+
+// export macros
+#define C_EXPORT extern "C"
+
+#if defined(_WIN32) || defined(__CYGWIN__)
+    #if defined(__GNUC__) || defined(__clang__)
+        #define DLL_EXPORT __attribute__((dllexport))
+        #define DLL_IMPORT __attribute__((dllimport))
+    #else
+        #define DLL_EXPORT __declspec(dllexport)
+        #define DLL_IMPORT __declspec(dllimport)
+    #endif
+#elif defined(__GNUC__) || defined(__clang__)
+    #define DLL_EXPORT __attribute__((visibility("default")))
+    #define DLL_IMPORT
+#else
+    #define DLL_EXPORT
+    #define DLL_IMPORT
 #endif
