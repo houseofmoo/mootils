@@ -1,4 +1,6 @@
 #include <cstdint>
+#include <cassert>
+#include <type_traits>
 #include <array>
 
 template <typename Enum, typename T, std::size_t N>
