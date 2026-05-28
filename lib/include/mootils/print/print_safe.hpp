@@ -15,24 +15,24 @@
 
 namespace print {
     namespace detail {
-        inline int32_t __id{0};
-        inline std::mutex __mtx;
+        inline int32_t id{0};
+        inline std::mutex mtx;
     }
 
-    inline void set_id(int32_t id) { detail::__id = id; }
+    inline void set_id(int32_t id) { detail::id = id; }
 
     template <typename... Args>
     inline void db_print(Args&&... args) noexcept {
-        std::lock_guard<std::mutex> lock(detail::__mtx);
-        std::cout << "[ " << detail::__id << " ] ";
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::cout << "[ " << detail::id << " ] DBG: ";
         ((std::cout << std::forward<Args>(args)), ...);
         std::cout << std::endl;
     }
 
     template <typename... Args>
-    inline void error_print(const char* func, Args&&... args) noexcept {
-        std::lock_guard<std::mutex> lock(detail::__mtx);
-        std::cerr << "[ " << detail::__id << " ] ERROR ";
+    inline void error_print_verbose(const char* func, Args&&... args) noexcept {
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::cerr << "[ " << detail::id << " ] ERROR: ";
         std::cerr << func << ": ";
         ((std::cerr << std::forward<Args>(args)), ...);
         std::cerr << std::endl;
@@ -40,16 +40,16 @@ namespace print {
 
     template <typename... Args>
     inline void error_print(Args&&... args) noexcept {
-        std::lock_guard<std::mutex> lock(detail::__mtx);
-        std::cerr << "[ " << detail::__id << " ] ERROR ";
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::cerr << "[ " << detail::id << " ] ERROR: ";
         ((std::cerr << std::forward<Args>(args)), ...);
         std::cerr << std::endl;
     }
 
     template <typename... Args>
     inline void info_print(Args&&... args) noexcept {
-        std::lock_guard<std::mutex> lock(detail::__mtx);
-        std::clog << "[ " << detail::__id << " ] INFO: ";
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::clog << "[ " << detail::id << " ] INFO: ";
         ((std::clog << std::forward<Args>(args)), ...);
         std::clog << std::endl;
     }
@@ -57,12 +57,12 @@ namespace print {
 
 #if defined(NDEBUG) // release
     #define DEBUG(...) do { (void)0; } while (0)
-    #define ERR_V(...) print::error_print(FUNC_SIG, __VA_ARGS__)
+    #define ERR_V(...) print::error_print_verbose(FUNC_SIG, __VA_ARGS__)
     #define ERR(...) print::error_print(__VA_ARGS__)
     #define INFO(...) print::info_print(__VA_ARGS__)
 #else // debug
     #define DEBUG(...) print::db_print(__VA_ARGS__)
-    #define ERR_V(...) print::error_print(FUNC_SIG, __VA_ARGS__)
+    #define ERR_V(...) print::error_print_verbose(FUNC_SIG, __VA_ARGS__)
     #define ERR(...) print::error_print(__VA_ARGS__)
     #define INFO(...) print::info_print(__VA_ARGS__)
 #endif
