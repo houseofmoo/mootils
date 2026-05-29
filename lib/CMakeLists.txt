@@ -61,11 +61,11 @@ target_compile_definitions(${PROJECT_NAME}
     PUBLIC
         $<$<PLATFORM_ID:Windows>:MOO_WIN32>
         $<$<PLATFORM_ID:Linux>:MOO_LINUX>
-        MOO_LOGQ_LOG_LEVEL=${LOG_LEVEL_VALUE} 
+        MOO_LOGQ_LOG_LEVEL=${LOG_LEVEL_VALUE}
 )
 
 # source files
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         #platform independent sources
         ${CMAKE_CURRENT_SOURCE_DIR}/src/root.cpp
@@ -90,7 +90,7 @@ target_sources(${PROJECT_NAME}
         >
 
         # linux only
-        $<$<PLATFORM_ID:Linux>:            
+        $<$<PLATFORM_ID:Linux>:
             ${CMAKE_CURRENT_SOURCE_DIR}/src/evt/linux/linux_named_semaphore.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/src/evt/linux/linux_semaphore.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/linux/linux_platform.cpp
@@ -105,7 +105,7 @@ target_sources(${PROJECT_NAME}
 )
 
 # local headers
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
     PUBLIC
@@ -122,7 +122,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     >
     $<$<CXX_COMPILER_ID:Clang>:
       -Wall -Wextra -Wpedantic -Werror
-      -Wsign-conversion 
+      -Wsign-conversion
       -Wfloat-conversion
       -Wold-style-cast
       -Wdouble-promotion
@@ -135,12 +135,12 @@ target_compile_options(${PROJECT_NAME} PRIVATE
       -Wimplicit-fallthrough
       -Wsign-conversion
       -Wcast-align
-      #-Wconversion # this one breaks any and all narrowing which 
+      #-Wconversion # this one breaks any and all narrowing which
                     # is used alot cause legacy code loved odd shaped ints
     >
     $<$<CXX_COMPILER_ID:GNU>:
       -Wall -Wextra -Wpedantic -Werror
-      -Wsign-conversion 
+      -Wsign-conversion
       -Wfloat-conversion
       -Wold-style-cast
       -Wdouble-promotion
@@ -157,14 +157,14 @@ target_compile_options(${PROJECT_NAME} PRIVATE
       -Wduplicated-branches
       -Wlogical-op
       -Wmisleading-indentation
-      #-Wconversion # this one breaks any and all narrowing which 
+      #-Wconversion # this one breaks any and all narrowing which
                     # is used alot cause legacy code loved odd shaped ints
     >
   >
 )
 
 # external system libs
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
     PRIVATE
         $<$<PLATFORM_ID:Windows>:ws2_32>
         $<$<PLATFORM_ID:Linux>:pthread>
