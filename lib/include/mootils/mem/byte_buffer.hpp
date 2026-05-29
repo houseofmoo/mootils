@@ -27,5 +27,10 @@ namespace mem {
         [[nodiscard]] std::span<std::byte> span() noexcept;
         [[nodiscard]] std::span<const std::byte> span() const noexcept;
         void clear() noexcept;
+
+        template <typename T>
+        T* as() {
+            return reinterpret_cast<T*>(m_arena.get());
+        }
     };
 }
