@@ -1,4 +1,5 @@
 // exists just to include all headers in once place to check compilation
+#include "mootils/mem/byte_buffer.hpp"
 #include "mootils/msg/spsc_queue.hpp"
 #include "mootils/msg/spmc_queue.hpp"
 #include "mootils/evt/event.hpp"
@@ -7,6 +8,8 @@
 #include "mootils/platform/platform.hpp"
 #include "mootils/print/print_safe.hpp"
 #include "mootils/print/log_q.hpp"
+#include "mootils/seri/byte/byte_reader.hpp"
+#include "mootils/seri/byte/byte_writer.hpp"
 #include "mootils/shm/shm.hpp"
 #include "mootils/sock/socket_context.hpp"
 #include "mootils/sock/socket_result.hpp"

@@ -29,7 +29,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     C_STANDARD 11
     C_STANDARD_REQUIRED YES
     C_EXTENSIONS NO
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
 )
@@ -69,6 +69,9 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         #platform independent sources
         ${CMAKE_CURRENT_SOURCE_DIR}/src/root.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_buffer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_reader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_writer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/shm/shm.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/print/log_q.cpp
 
