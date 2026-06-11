@@ -1,0 +1,68 @@
+#pragma once
+
+#include <iostream>
+#include <utility>
+#include <mutex>
+#include <cstdint>
+
+#if defined(__clang__) || defined(__GNUC__)
+    #define FUNC_SIG __PRETTY_FUNCTION__
+#elif defined(_MSC_VER)
+    #define FUNC_SIG __FUNCSIG__
+#else
+    #define FUNC_SIG __func__
+#endif
+
+namespace print {
+    namespace detail {
+        inline int32_t id{0};
+        inline std::mutex mtx;
+    }
+
+    inline void set_id(int32_t id) { detail::id = id; }
+
+    template <typename... Args>
+    inline void db_print(Args&&... args) noexcept {
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::cout << "[ " << detail::id << " ] DBG: ";
+        ((std::cout << std::forward<Args>(args)), ...);
+        std::cout << std::endl;
+    }
+
+    template <typename... Args>
+    inline void error_print_verbose(const char* func, Args&&... args) noexcept {
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::cerr << "[ " << detail::id << " ] ERROR: ";
+        std::cerr << func << ": ";
+        ((std::cerr << std::forward<Args>(args)), ...);
+        std::cerr << std::endl;
+    }
+
+    template <typename... Args>
+    inline void error_print(Args&&... args) noexcept {
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::cerr << "[ " << detail::id << " ] ERROR: ";
+        ((std::cerr << std::forward<Args>(args)), ...);
+        std::cerr << std::endl;
+    }
+
+    template <typename... Args>
+    inline void info_print(Args&&... args) noexcept {
+        std::lock_guard<std::mutex> lock(detail::mtx);
+        std::clog << "[ " << detail::id << " ] INFO: ";
+        ((std::clog << std::forward<Args>(args)), ...);
+        std::clog << std::endl;
+    }
+}
+
+#if defined(NDEBUG) // release
+    #define DEBUG(...) do { (void)0; } while (0)
+    #define ERR_V(...) print::error_print_verbose(FUNC_SIG, __VA_ARGS__)
+    #define ERR(...) print::error_print(__VA_ARGS__)
+    #define INFO(...) print::info_print(__VA_ARGS__)
+#else // debug
+    #define DEBUG(...) print::db_print(__VA_ARGS__)
+    #define ERR_V(...) print::error_print_verbose(FUNC_SIG, __VA_ARGS__)
+    #define ERR(...) print::error_print(__VA_ARGS__)
+    #define INFO(...) print::info_print(__VA_ARGS__)
+#endif
