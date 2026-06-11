@@ -6,7 +6,7 @@
 #include "socket_result.hpp"
 
 namespace sock {
-    #if defined(MOO_WIN32) 
+    #if defined(MOO_WIN32)
         using socket_handle = std::uintptr_t;
     #elif defined(MOO_LINUX)
         constexpr std::int32_t INVALID_SOCKET = -1;
@@ -32,8 +32,8 @@ namespace sock {
             void close() noexcept;
 
             // shared implementation
-            [[nodiscard]] bool is_connected() const noexcept { 
-                return m_connected && handle_valid(); 
+            [[nodiscard]] bool is_connected() const noexcept {
+                return m_connected && handle_valid();
             }
 
             void adopt(socket_handle handle, bool connected = true) noexcept {
@@ -47,7 +47,6 @@ namespace sock {
                 close();
             }
 
-
         protected:
             bool handle_valid() const noexcept;
     };
@@ -57,7 +56,7 @@ namespace sock {
             // to prevent any chance of a send being interrupted and data arriving at
             // destination out of order, we lock on sends. We do not need to lock
             // on recvs since only 1 thread listens to each sockets incoming messages
-            std::mutex m_send_mtx; 
+            std::mutex m_send_mtx;
 
         public:
             TCPClient();
@@ -106,7 +105,7 @@ namespace sock {
 
                 return listen(0);
             }
-            
+
             void request_stop() noexcept { close(); }
     };
 }

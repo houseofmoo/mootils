@@ -3,13 +3,12 @@
 #include <memory>
 #include <cstddef>
 #include <span>
-#include <algorithm>
 
 namespace mem {
     // extremely simple thread UNSAFE memory block for temp storage
     class ByteBuffer {
         private:
-        std::unique_ptr<std::byte[]> m_arena;
+        std::unique_ptr<std::byte[]> m_buf;
         std::size_t m_size;
 
         public:
@@ -30,7 +29,7 @@ namespace mem {
 
         template <typename T>
         T* as() {
-            return reinterpret_cast<T*>(m_arena.get());
+            return reinterpret_cast<T*>(m_buf.get());
         }
     };
 }

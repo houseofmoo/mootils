@@ -71,8 +71,10 @@ target_sources(${PROJECT_NAME}
         #platform independent sources
         ${CMAKE_CURRENT_SOURCE_DIR}/src/root.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_buffer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/cyclic_byte_buffer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_reader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_writer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sock/utils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/shm/shm.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/print/log_q.cpp
 
@@ -123,7 +125,6 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     >
     $<$<CXX_COMPILER_ID:Clang>:
       -Wall -Wextra -Wpedantic -Werror
-      -Wsign-conversion
       -Wfloat-conversion
       -Wold-style-cast
       -Wdouble-promotion
@@ -136,8 +137,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
       -Wimplicit-fallthrough
       -Wsign-conversion
       -Wcast-align
-      #-Wconversion # this one breaks any and all narrowing which
-                    # is used alot cause legacy code loved odd shaped ints
+      -Wconversion
     >
     $<$<CXX_COMPILER_ID:GNU>:
       -Wall -Wextra -Wpedantic -Werror
@@ -158,8 +158,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
       -Wduplicated-branches
       -Wlogical-op
       -Wmisleading-indentation
-      #-Wconversion # this one breaks any and all narrowing which
-                    # is used alot cause legacy code loved odd shaped ints
+      -Wconversion
     >
   >
 )
