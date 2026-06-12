@@ -17,6 +17,7 @@
 #include "mootils/sock/udp_multicast.hpp"
 #include "mootils/macros.hpp"
 #include "mootils/containers/enum_array.hpp"
+#include "mootils/mem/arena.hpp"
 
 void do_nothing() {
     msg::SPSCQueue<int> channel;

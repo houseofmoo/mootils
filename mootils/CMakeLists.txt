@@ -84,6 +84,7 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         #platform independent sources
         ${CMAKE_CURRENT_SOURCE_DIR}/src/root.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/arena.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_buffer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/cyclic_byte_buffer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_reader.cpp
