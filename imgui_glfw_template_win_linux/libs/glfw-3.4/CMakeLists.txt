@@ -65,6 +65,9 @@ elseif (UNIX AND NOT APPLE)
     find_package(Threads REQUIRED)
     find_package(X11 REQUIRED)
 
+    # fix missing linux packages?
+    target_compile_definitions(glfw PRIVATE _POSIX_C_SOURCE=199309L _GNU_SOURCE)
+
     if (NOT X11_Xrandr_INCLUDE_PATH OR NOT X11_Xrandr_LIB)
         message(FATAL_ERROR "GLFW X11 support requires XRandR development files, e.g. libxrandr-dev.")
     endif()

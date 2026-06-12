@@ -4,15 +4,9 @@
 #include <memory>
 #include <cstdint>
 #include "socket_result.hpp"
+#include "socket_defs.hpp"
 
 namespace sock {
-    #if defined(MOO_WIN32)
-        using socket_handle = std::uintptr_t;
-    #elif defined(MOO_LINUX)
-        constexpr std::int32_t INVALID_SOCKET = -1;
-        using socket_handle = int;
-    #endif
-
     class TCPSocket {
         protected:
             socket_handle m_handle;

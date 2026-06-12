@@ -9,7 +9,7 @@
 #include <errno.h>
 
 namespace sock {
-    TCPClient::TCPClient() : TCPSocket(), m_dest_id(INVALID_NODE) {}
+    TCPClient::TCPClient() : TCPSocket() {}
 
     SockResult TCPClient::connect(const char* ip, uint16_t port) {
         if (!handle_valid()) return SockResult{ SockErr::InvalidHandle, SockOp::Connect, 0, 0 };

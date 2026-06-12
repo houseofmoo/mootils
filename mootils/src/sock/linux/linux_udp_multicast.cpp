@@ -40,7 +40,7 @@ namespace sock {
         return *this;
     }
 
-    SockResult UDPMulticastSocket::open_and_join(const cfg::UdpMcastConfig& cfg) {
+    SockResult UDPMulticastSocket::open_and_join(const UdpMcastConfig& cfg) {
         SockResult result{};
         result.op = SockOp::Open;
 

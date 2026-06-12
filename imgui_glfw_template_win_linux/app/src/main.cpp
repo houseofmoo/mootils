@@ -8,7 +8,7 @@
 #include "ui/alignment.h"
 #include "ui/element.h"
 
-void draw_ui(UiContext& context, ImGuiIO& io) {
+void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     static bool show_demo_window = false;
     if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
@@ -26,14 +26,14 @@ void draw_ui(UiContext& context, ImGuiIO& io) {
 
     // child element example
     {
-        style::StyleFont font(context.get_font(FontKind::Roboto));
+        //style::StyleFont font(context.get_font(FontKind::Roboto));
         elem::Child child("demo_panel", ImVec2(300, 100));
         ImGui::Checkbox("Demo Window", &show_demo_window);
     }
 
     // text child element example
     {
-        style::StyleFont font(context.get_font(FontKind::Consolas));
+        //style::StyleFont font(context.get_font(FontKind::Consolas));
         style::StyleColor color(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 1.0f, 1.0f));
         elem::Child child("consolas_panel", ImVec2(300, 100));
         ImGui::Text("this is a thing");
@@ -61,7 +61,7 @@ int main() {
             "MainWindow"
         });
 
-        context.load_fonts();
+        //context.load_fonts();
         ImGuiIO& io = context.io();
 
         while (!context.should_close()) {

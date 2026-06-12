@@ -81,7 +81,7 @@ namespace shm {
         using shm_view = void*;
     #elif defined(MOO_LINUX)
         using shm_handle = int32_t;
-        using shm_view = std::byte*;
+        using shm_view = void*;
     #endif
 
     class Shm {

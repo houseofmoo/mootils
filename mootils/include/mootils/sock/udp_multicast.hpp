@@ -3,6 +3,7 @@
 #include <utility>
 #include <string>
 #include "socket_result.hpp"
+#include "socket_defs.hpp"
 
 namespace sock {
     struct UdpMcastConfig {
@@ -13,13 +14,6 @@ namespace sock {
         bool loopback = true;
         bool reuse_addr = true;
     };
-
-    #if defined(MOO_WIN32) 
-        using socket_handle = std::uintptr_t;
-    #elif defined(MOO_LINUX)
-        constexpr std::int32_t INVALID_SOCKET = -1;
-        using socket_handle = int;
-    #endif
 
     class UDPMulticastSocket final {
         private:

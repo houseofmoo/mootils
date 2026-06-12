@@ -6,13 +6,12 @@
                 "${default}",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/lib/src/**",
-                "${workspaceFolder}/lib/include/**",
-                "${workspaceFolder}/tests/src/**"
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/include/**"
             ],
             "windowsSdkVersion": "10.0.26100.0",
             "intelliSenseMode": "windows-msvc-x64",
-            "defines": ["MOO_WIN32"]
+            "defines": ["MOO_LINUX"]
         }
     ],
     "version": 4
