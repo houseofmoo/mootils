@@ -27,11 +27,11 @@ namespace mem {
         [[nodiscard]] std::size_t remaining() const noexcept;
         [[nodiscard]] std::size_t size() const noexcept;
         [[nodiscard]] std::span<std::byte> allocate(std::size_t size) noexcept;
-        [[nodiscard]] bool empty() const noexcept;
-        [[nodiscard]] std::span<std::byte> span() noexcept;
-        [[nodiscard]] std::span<const std::byte> span() const noexcept;
+        [[nodiscard]] bool is_empty() const noexcept;
+        [[nodiscard]] std::span<std::byte> as_span() noexcept;
+        [[nodiscard]] std::span<const std::byte> as_span() const noexcept;
         void reset() noexcept;
-        void clear() noexcept;
+        void zero_out() noexcept;
 
         template <typename T>
         T* as() {

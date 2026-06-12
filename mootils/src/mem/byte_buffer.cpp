@@ -17,19 +17,19 @@ namespace mem {
         return m_size;
     }
 
-    bool ByteBuffer::empty() const noexcept {
+    bool ByteBuffer::is_empty() const noexcept {
         return m_size == 0;
     }
 
-    std::span<std::byte> ByteBuffer::span() noexcept {
+    std::span<std::byte> ByteBuffer::as_span() noexcept {
         return {m_buf.get(), m_size};
     }
 
-    std::span<const std::byte> ByteBuffer::span() const noexcept {
+    std::span<const std::byte> ByteBuffer::as_span() const noexcept {
         return {m_buf.get(), m_size};
     }
 
-    void ByteBuffer::clear() noexcept {
+    void ByteBuffer::zero_out() noexcept {
         std::fill_n(m_buf.get(), m_size, std::byte{0});
     }
 }

@@ -16,15 +16,19 @@ namespace mem {
         return std::span<std::byte>{m_buf.get() + current_offset, size};
     }
 
-    void Arena::reset() noexcept {
-        m_offset = 0;
-    }
-
     std::size_t Arena::size() const noexcept {
         return m_size;
     }
 
     std::size_t Arena::remaining() const noexcept {
         return m_size - m_offset;
+    }
+
+    void Arena::reset() noexcept {
+        m_offset = 0;
+    }
+
+    void Arena::zero_out() noexcept {
+        std::fill_n(m_buf.get(), m_size, std::byte{0});
     }
 }

@@ -22,10 +22,10 @@ namespace mem {
         [[nodiscard]] std::byte* data() noexcept;
         [[nodiscard]] const std::byte* data() const noexcept;
         [[nodiscard]] std::size_t size() const noexcept;
-        [[nodiscard]] bool empty() const noexcept;
-        [[nodiscard]] std::span<std::byte> span() noexcept;
-        [[nodiscard]] std::span<const std::byte> span() const noexcept;
-        void clear() noexcept;
+        [[nodiscard]] bool is_empty() const noexcept;
+        [[nodiscard]] std::span<std::byte> as_span() noexcept;
+        [[nodiscard]] std::span<const std::byte> as_span() const noexcept;
+        void zero_out() noexcept;
 
         template <typename T>
         T* as() {
