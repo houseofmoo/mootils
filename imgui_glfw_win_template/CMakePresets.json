@@ -13,15 +13,6 @@
     },
 
     {
-      "name": "__linux",
-      "hidden": true,
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Linux"
-      }
-    },
-    {
       "name": "__windows",
       "hidden": true,
       "condition": {
@@ -49,12 +40,6 @@
     },
 
     {
-      "name": "__gnu-linux",
-      "hidden": true,
-      "inherits": ["__base", "__linux"],
-      "generator": "Unix Makefiles"
-    },
-    {
       "name": "__gnu-windows",
       "hidden": true,
       "inherits": ["__base", "__windows"],
@@ -66,17 +51,6 @@
       "inherits": ["__base", "__windows"],
       "generator": "Visual Studio 17 2022",
       "architecture": "x64"
-    },
-
-    {
-      "name": "linux-gnu-debug",
-      "inherits": ["__gnu-linux", "__debug"],
-      "displayName": "GNU Linux Debug"
-    },
-    {
-      "name": "linux-gnu-release",
-      "inherits": ["__gnu-linux", "__release"],
-      "displayName": "GNU Linux Release"
     },
 
     {
@@ -102,19 +76,6 @@
     }
   ],
   "buildPresets": [
-    {
-      "name": "linux-gnu-debug",
-      "displayName": "GNU Linux Debug",
-      "configurePreset": "linux-gnu-debug",
-      "jobs": 0
-    },
-    {
-      "name": "linux-gnu-release",
-      "displayName": "GNU Linux Release",
-      "configurePreset": "linux-gnu-release",
-      "jobs": 0
-    },
-
     {
       "name": "win-gnu-debug",
       "displayName": "GNU Windows Debug",
