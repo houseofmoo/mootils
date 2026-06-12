@@ -1,105 +1,146 @@
 {
   "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
   "configurePresets": [
     {
-      "name": "__build-root",
+      "name": "__base",
       "hidden": true,
       "binaryDir": "${sourceDir}/build/${presetName}"
     },
+
     {
-      "name": "linux-debug",
-      "inherits": "__build-root",
-      "displayName": "Linux Debug build",
-      "generator": "Unix Makefiles",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+      "name": "__linux",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
       }
     },
     {
-      "name": "linux-release",
-      "inherits": "__build-root",
-      "displayName": "Linux Release build",
-      "generator": "Unix Makefiles",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+      "name": "__windows",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
 
     {
-      "name": "win-debug",
-      "inherits": "__build-root",
-      "displayName": "Debug build",
-      "generator": "MinGW Makefiles",
+      "name": "__debug",
+      "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "LOG_LEVEL": "Debug"
       }
     },
     {
-      "name": "win-release",
-      "inherits": "__build-root",
-      "displayName": "Release build",
-      "generator": "MinGW Makefiles",
+      "name": "__release",
+      "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "LOG_LEVEL": "Warning"
       }
     },
+
+    {
+      "name": "__gnu-linux",
+      "hidden": true,
+      "inherits": ["__base", "__linux"],
+      "generator": "Unix Makefiles"
+    },
+    {
+      "name": "__gnu-windows",
+      "hidden": true,
+      "inherits": ["__base", "__windows"],
+      "generator": "MinGW Makefiles"
+    },
+    {
+      "name": "__msvc-windows",
+      "hidden": true,
+      "inherits": ["__base", "__windows"],
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64"
+    },
+
+    {
+      "name": "linux-gnu-debug",
+      "inherits": ["__gnu-linux", "__debug"],
+      "displayName": "GNU Linux Debug"
+    },
+    {
+      "name": "linux-gnu-release",
+      "inherits": ["__gnu-linux", "__release"],
+      "displayName": "GNU Linux Release"
+    },
+
+    {
+      "name": "win-gnu-debug",
+      "inherits": ["__gnu-windows", "__debug"],
+      "displayName": "GNU Windows Debug"
+    },
+    {
+      "name": "win-gnu-release",
+      "inherits": ["__gnu-windows", "__release"],
+      "displayName": "GNU Windows Release"
+    },
+
     {
       "name": "win-msvc-debug",
-      "inherits": "__build-root",
-      "displayName": "MSVC Debug build",
-      "generator": "Visual Studio 17 2022",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      }
+      "inherits": ["__msvc-windows", "__debug"],
+      "displayName": "MSVC Windows Debug"
     },
     {
       "name": "win-msvc-release",
-      "inherits": "__build-root",
-      "displayName": "MSVC Release build",
-      "generator": "Visual Studio 17 2022",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      }
+      "inherits": ["__msvc-windows", "__release"],
+      "displayName": "MSVC Windows Release"
     }
   ],
   "buildPresets": [
     {
-      "name": "linux-debug",
-      "displayName": "Build Linux Debug",
-      "configurePreset": "linux-debug",
+      "name": "linux-gnu-debug",
+      "displayName": "GNU Linux Debug",
+      "configurePreset": "linux-gnu-debug",
       "jobs": 0
     },
     {
-      "name": "linux-release",
-      "displayName": "Build Linux Release",
-      "configurePreset": "linux-release",
+      "name": "linux-gnu-release",
+      "displayName": "GNU Linux Release",
+      "configurePreset": "linux-gnu-release",
+      "jobs": 0
+    },
+
+    {
+      "name": "win-gnu-debug",
+      "displayName": "GNU Windows Debug",
+      "configurePreset": "win-gnu-debug",
       "jobs": 0
     },
     {
-      "name": "win-debug",
-      "displayName": "Build Windows Debug",
-      "configurePreset": "win-debug",
+      "name": "win-gnu-release",
+      "displayName": "GNU Windows Release",
+      "configurePreset": "win-gnu-release",
       "jobs": 0
     },
-    {
-      "name": "win-release",
-      "displayName": "Build Windows Release",
-      "configurePreset": "win-release",
-      "jobs": 0
-    },
+
     {
       "name": "win-msvc-debug",
-      "displayName": "Build Windows MSVC Debug",
+      "displayName": "MSVC Windows Debug",
       "configurePreset": "win-msvc-debug",
-      "configuration": "Debug"
+      "configuration": "Debug",
+      "jobs": 0
     },
     {
       "name": "win-msvc-release",
-      "displayName": "Build Windows MSVC Release",
+      "displayName": "MSVC Windows Release",
       "configurePreset": "win-msvc-release",
-      "configuration": "Release"
+      "configuration": "Release",
+      "jobs": 0
     }
   ]
 }

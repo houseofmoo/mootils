@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.25)
 project(glfw VERSION 3.4.0 LANGUAGES C)
 
 if (NOT WIN32)

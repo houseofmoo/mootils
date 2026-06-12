@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.25)
 project(imgui LANGUAGES C CXX)
 
 # cpp version
@@ -13,7 +13,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 add_library(${PROJECT_NAME} STATIC)
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/imgui.cpp
         src/imgui_widgets.cpp
@@ -24,8 +24,8 @@ target_sources(${PROJECT_NAME}
         src/backends/imgui_impl_opengl3.cpp
 )
 
-target_include_directories(${PROJECT_NAME} 
-    PRIVATE 
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
         src/
         src/backends
     PUBLIC
