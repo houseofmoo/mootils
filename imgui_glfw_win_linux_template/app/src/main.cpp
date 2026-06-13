@@ -4,9 +4,9 @@
 #include "imgui/imgui.h"
 
 #include "context/ui_context.hpp"
-#include "ui/style.h"
-#include "ui/alignment.h"
-#include "ui/element.h"
+#include "ui/style.hpp"
+#include "ui/alignment.hpp"
+#include "ui/element.hpp"
 
 void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     static bool show_demo_window = false;

@@ -43,6 +43,17 @@ target_compile_options(${PROJECT_NAME} PRIVATE
       -Wmisleading-indentation
       -Wconversion
     >
+    $<$<CXX_COMPILER_ID:MSVC>:
+      /W4
+      /WX
+      /permissive-
+      /Zc:__cplusplus
+      /Zc:preprocessor
+      /Zc:externConstexpr
+      /Zc:inline
+      /Zc:throwingNew
+      /EHsc
+    >
   >
 )
 

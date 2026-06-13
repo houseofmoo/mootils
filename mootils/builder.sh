@@ -21,21 +21,20 @@ RUN="false"
 # -------- parse args --------
 while [[ $# -gt 0 ]]; do
   case "$1" in
-
     --debug)
-      PRESET="linux-gnu-debug"
+      RELEASE="false"
       shift
       ;;
     --release)
-      PRESET="linux-gnu-release"
+      RELEASE="true"
       shift
       ;;
     --static)
-      SHARED="true"
+      SHARED="false"
       shift
       ;;
     --shared)
-      AS_SHARED_LIB="true"
+      SHARED="true"
       shift
       ;;
     --clean)

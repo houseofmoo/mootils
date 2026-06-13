@@ -14,7 +14,6 @@ rem     cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
 rem     cmake --build build --parallel
 rem ============================================================
 
-set PRESET=win-msvc-debug
 set BUILD_DIR=build
 set PRESET=win
 

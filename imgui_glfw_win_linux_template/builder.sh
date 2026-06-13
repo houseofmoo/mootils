@@ -3,35 +3,37 @@ set -euo pipefail
 
 # ============================================================
 # Usage:
-#   ./build.sh [--debug | --release] [--clean] [--run]
+#   ./builder.sh [--debug | --release] [--clean] [--run]
 # ------------------------------------------------------------
 # Examples:
-#   ./build.sh --debug
-#   ./build.sh --release --clean
+#   ./builder.sh --debug
+#   ./builder.sh --release --clean
 # ============================================================
 
-PRESET="linux-gnu-debug"
+PRESET="linux-gnu"
 BUILD_DIR="build"
+
+RELEASE="false"
 CLEAN="false"
-RUN_AFTER_BUILD="false"
+RUN="false"
 
 # -------- parse args --------
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --run)
-      RUN_AFTER_BUILD="true"
-      shift
-      ;;
     --debug)
-      PRESET="linux-gnu-debug"
+      RELEASE="false"
       shift
       ;;
     --release)
-      PRESET="linux-gnu-release"
+      RELEASE="true"
       shift
       ;;
     --clean)
       CLEAN="true"
+      shift
+      ;;
+    --run)
+      RUN="true"
       shift
       ;;
     *)
@@ -54,6 +56,12 @@ if [[ "$CLEAN" == "true" ]]; then
   fi
 fi
 
+if [[ "$RELEASE" == "true" ]]; then
+  PRESET="$PRESET-release"
+else
+  PRESET="$PRESET-debug"
+fi
+
 echo
 echo "Running CMake configure preset \"$PRESET\""
 cmake --preset "$PRESET"
@@ -65,7 +73,7 @@ cmake --build --preset "$PRESET" --parallel
 echo
 echo "Build completed successfully for preset \"$PRESET\""
 
-# if [[ "$RUN_AFTER_BUILD" == "true" ]]; then
+# if [[ "$RUN" == "true" ]]; then
 #   echo
 #   echo "Running the built executable..."
 #   if [[ -x "./run.sh" ]]; then
