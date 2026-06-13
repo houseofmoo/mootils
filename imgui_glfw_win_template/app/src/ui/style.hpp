@@ -129,7 +129,7 @@ namespace ui::style {
     public:
         explicit FrameRounding(float roundness) : StyleVar(ImGuiStyleVar_FrameRounding, roundness) {}
     };
-    
+
     class ScrollbarRounding : public StyleVar {
     public:
         explicit ScrollbarRounding(float roundness) : StyleVar(ImGuiStyleVar_ScrollbarRounding, roundness) {}

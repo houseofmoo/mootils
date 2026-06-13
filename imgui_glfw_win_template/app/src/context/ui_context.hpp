@@ -2,7 +2,7 @@
 #include <string>
 #include <array>
 #include <cstdint>
-#include "containers/enum_array.h"
+#include "containers/enum_array.hpp"
 #include "GLFW/glfw3.h"
 #include "imgui/imgui.h"
 
@@ -50,7 +50,7 @@ class UiContext {
         UiContext& operator=(const UiContext&) = delete;
         UiContext(UiContext&&) = delete;
         UiContext& operator=(UiContext&&) = delete;
-        
+
 
         bool should_close() const noexcept;
         GLFWwindow* window() noexcept;

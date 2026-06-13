@@ -3,11 +3,11 @@ setlocal
 
 rem ============================================================
 rem Usage:
-rem   build.bat [--debug-gnu | --debug-msvc | --release-gnu | --release-msvc] [--clean] [--run]
+rem   builder.bat [--debug | --release] [--gnu | --msvc] [--clean] [--run]
 rem ------------------------------------------------------------
 rem Examples:
-rem   build.bat --debug-gnu
-rem   build.bat --release-gnu --clean
+rem   builder.bat --debug -gnu
+rem   builder.bat --release -msvc --clean
 rem ------------------------------------------------------------
 rem Manual cmake build commands:
 rem     cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
@@ -16,24 +16,28 @@ rem ============================================================
 
 set PRESET=win-msvc-debug
 set BUILD_DIR=build
+set PRESET=win
+
+set MSVC=false
+set RELEASE=false
 set CLEAN=false
-set RUN_AFTER_BUILD=false
+set RUN=false
 
 :parse_args
     if "%~1"=="" goto after_args
 
-    if /I "%~1"=="--debug-gnu" (
-        set PRESET=win-gnu-debug
-    ) else if /I "%~1"=="--release-gnu" (
-        set PRESET=win-gnu-release
-    ) else if /I "%~1"=="--debug-msvc" (
-        set PRESET=win-msvc-debug
-    ) else if /I "%~1"=="--release-msvc" (
-        set PRESET=win-msvc-release
+    if /I "%~1"=="--debug" (
+        set RELEASE=false
+    ) else if /I "%~1"=="--release" (
+        set RELEASE=true
+    ) else if /I "%~1"=="--gnu" (
+        set MSVC=false
+    ) else if /I "%~1"=="--msvc" (
+        set MSVC=true
     ) else if /I "%~1"=="--clean" (
         set CLEAN=true
     ) else if /I "%~1"=="--run" (
-        set RUN_AFTER_BUILD=true
+        set RUN=true
     ) else (
         echo Unknown option: %~1
         echo Usage: builder.bat [--debug-gnu | --debug-msvc | --release-gnu | --release-msvc] [--clean] [--run]
@@ -61,6 +65,18 @@ if "%CLEAN%"=="true" (
     )
 )
 
+rem select build preset
+if "%MSVC%"=="true" (
+    set PRESET=%PRESET%-msvc
+) else (
+    set PRESET=%PRESET%-gnu
+)
+if "%RELEASE%"=="true" (
+    set PRESET=%PRESET%-release
+) else (
+    set PRESET=%PRESET%-debug
+)
+
 echo.
 echo Running CMake configure preset "%PRESET%"
 cmake --preset %PRESET%
@@ -84,7 +100,7 @@ if errorlevel 1 (
 echo.
 echo Build completed successfully for preset "%PRESET%"
 
-if "%RUN_AFTER_BUILD%"=="true" (
+if "%RUN%"=="true" (
     run.bat
 )
 

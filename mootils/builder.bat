@@ -3,7 +3,7 @@ setlocal
 
 rem ============================================================
 rem Usage:
-rem   builder.bat [--debug | --release] [--gnu | --msvc]  [--static | --shared] [--clean] [--run]
+rem   builder.bat [--debug | --release] [--gnu | --msvc] [--static | --shared] [--clean] [--run]
 rem ------------------------------------------------------------
 rem Examples:
 rem   builder.bat --debug -gnu
@@ -87,7 +87,6 @@ if "%SHARED%"=="true" (
 ) else (
     set PRESET=%PRESET%-static
 )
-
 
 echo.
 echo Running CMake configure preset "%PRESET%"

@@ -26,16 +26,14 @@
       "name": "__debug",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "LOG_LEVEL": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
       "name": "__release",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "LOG_LEVEL": "Warning"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     },
 
