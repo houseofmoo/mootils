@@ -1,7 +1,7 @@
 #include "imgui/imgui.h"
 #include <cstdint>
 
-namespace style {
+namespace ui::style {
     // generic style font setter
     class StyleFont {
     public:
@@ -102,11 +102,9 @@ namespace style {
     private:
         bool m_enabled = false;
     };
-
-    
 }
 
-namespace style {
+namespace ui::style {
     class FramePadding : public StyleVar {
     public:
         explicit FramePadding(const ImVec2& padding) : StyleVar(ImGuiStyleVar_FramePadding, padding) {}

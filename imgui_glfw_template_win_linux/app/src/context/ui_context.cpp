@@ -20,8 +20,12 @@ UiContext::~UiContext() {
 void UiContext::init() {
     glfwSetErrorCallback(glfw_error_callback);
 
+#if !defined(NDEBUG)
     const int glfw_ok = glfwInit();
     assert(glfw_ok != 0);
+#else
+    glfwInit();
+#endif
     m_glfw_initialized = true;
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_config.gl_major);
@@ -32,8 +36,8 @@ void UiContext::init() {
 
     m_main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(monitor); // valid on GLFW 3.3+ only
     m_window = glfwCreateWindow(
-        static_cast<int>(m_config.width * m_main_scale), 
-        static_cast<int>(m_config.height * m_main_scale), 
+        static_cast<int>(m_config.width * m_main_scale),
+        static_cast<int>(m_config.height * m_main_scale),
         m_config.title, nullptr, nullptr
     );
     assert(m_window != nullptr);
@@ -51,11 +55,19 @@ void UiContext::init() {
 
     setup_styles();
 
+#if !defined(NDEBUG)
     const bool glfw_backend_ok = ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     assert(glfw_backend_ok);
+#else
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+#endif
 
+#if !defined(NDEBUG)
     const bool opengl_backend_ok = ImGui_ImplOpenGL3_Init(m_config.glsl_version);
     assert(opengl_backend_ok);
+#else
+    ImGui_ImplOpenGL3_Init(m_config.glsl_version);
+#endif
 
     m_backends_initialized = true;
 }
@@ -149,7 +161,7 @@ bool UiContext::begin_frame() {
 void UiContext::end_frame() {
     ImGui::Render();
 
-    int display_w = 0; 
+    int display_w = 0;
     int display_h = 0;
     glfwGetFramebufferSize(m_window, &display_w, &display_h);
 

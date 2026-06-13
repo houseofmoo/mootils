@@ -1,6 +1,6 @@
 #include "imgui/imgui.h"
 
-namespace align {
+namespace ui::align {
     inline void Empty(float width, float height) {
         ImGui::Dummy(ImVec2(width, height));
     }

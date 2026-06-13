@@ -26,23 +26,23 @@ void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
 
     // child element example
     {
-        //style::StyleFont font(context.get_font(FontKind::Roboto));
-        elem::Child child("demo_panel", ImVec2(300, 100));
+        //ui::style::StyleFont font(context.get_font(FontKind::Roboto));
+        ui::elem::Child child("demo_panel", ImVec2(300, 100));
         ImGui::Checkbox("Demo Window", &show_demo_window);
     }
 
     // text child element example
     {
-        //style::StyleFont font(context.get_font(FontKind::Consolas));
-        style::StyleColor color(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 1.0f, 1.0f));
-        elem::Child child("consolas_panel", ImVec2(300, 100));
+        //ui::style::StyleFont font(context.get_font(FontKind::Consolas));
+        ui::style::StyleColor color(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 1.0f, 1.0f));
+        ui::elem::Child child("consolas_panel", ImVec2(300, 100));
         ImGui::Text("this is a thing");
     }
 
     // alignment example
     {
         auto height = 16;
-        align::NextItemBottomY(static_cast<float>(height));
+        ui::align::NextItemBottomY(static_cast<float>(height));
         ImGui::Text("FPS: %.1f", static_cast<double>(io.Framerate));
         ImGui::SameLine();
 #ifndef NDEBUG
@@ -68,7 +68,7 @@ int main() {
             if (!context.begin_frame()) { continue; }
 
             {
-                elem::BaseWindow background{io};
+                ui::elem::BaseWindow background{io};
                 draw_ui(context, io);
             }
 

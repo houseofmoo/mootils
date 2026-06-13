@@ -1,6 +1,6 @@
 #include "imgui/imgui.h"
 
-namespace elem {
+namespace ui::elem {
     class BaseWindow {
         private:
             bool m_drawn;
