@@ -46,8 +46,7 @@ build/
 bin/
 install/
 out/
-.VSCodeCounter/
-imgui_openfl_glfw_template_win_linux/build/
-imgui_opengl_glfw_win_template/build/
+imgui_glfw_win_linux_template/build/
+imgui_glfw_win_template/build/
 mootils/build
 .vs
