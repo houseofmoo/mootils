@@ -2,6 +2,7 @@
 
 #include <string>
 #include <cstdint>
+#include "mootils/api.hpp"
 
 namespace evt {
     enum class NamedSemErr {
@@ -23,7 +24,7 @@ namespace evt {
         TryWait,
         Wait
     };
-    
+
     struct NamedSemResult {
         NamedSemErr code;
         NamedSemOp op;
@@ -71,26 +72,24 @@ namespace evt {
     // Counting named semaphore
     class NamedSemaphore {
         private:
-            std::int64_t m_dst_id; 
+            std::int64_t m_dst_id;
             sem_handle m_sem;
 
         public:
-            NamedSemaphore(std::int64_t id);
-            ~NamedSemaphore();
+            MOOTILS_API NamedSemaphore(std::int64_t id);
+            MOOTILS_API  ~NamedSemaphore();
 
             NamedSemaphore(const NamedSemaphore&) = delete;
             NamedSemaphore& operator=(const NamedSemaphore&) = delete;
-            NamedSemaphore(NamedSemaphore&& other) noexcept;
-            NamedSemaphore& operator=(NamedSemaphore&& other) noexcept;
-            
-            std::string name() const;
-            std::int64_t get_dst_id() const { return m_dst_id; }
-            [[nodiscard]] NamedSemResult open();
-            [[nodiscard]] NamedSemResult post() const;
-            [[nodiscard]] NamedSemResult try_wait() const;
-            [[nodiscard]] NamedSemResult wait(std::uint32_t milliseconds = 0) const;
-            void close();
+            MOOTILS_API NamedSemaphore(NamedSemaphore&& other) noexcept;
+            MOOTILS_API NamedSemaphore& operator=(NamedSemaphore&& other) noexcept;
 
-        private: 
+            MOOTILS_API std::string name() const;
+            MOOTILS_API std::int64_t get_dst_id() const { return m_dst_id; }
+            MOOTILS_API [[nodiscard]] NamedSemResult open();
+            MOOTILS_API [[nodiscard]] NamedSemResult post() const;
+            MOOTILS_API [[nodiscard]] NamedSemResult try_wait() const;
+            MOOTILS_API [[nodiscard]] NamedSemResult wait(std::uint32_t milliseconds = 0) const;
+            MOOTILS_API void close();
     };
 }

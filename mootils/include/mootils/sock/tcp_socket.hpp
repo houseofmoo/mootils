@@ -6,6 +6,7 @@
 #include <cstddef>
 #include "socket_result.hpp"
 #include "socket_defs.hpp"
+#include "mootils/api.hpp"
 
 namespace sock {
     // raw socket handle wrapper. Use TCPClient or TCPServer instead of TCPSocket directly
@@ -15,17 +16,16 @@ namespace sock {
             bool m_connected;
 
         public:
-            TCPSocket();
-            ~TCPSocket();
-
+            MOOTILS_API TCPSocket();
+            MOOTILS_API ~TCPSocket();
             TCPSocket(const TCPSocket&) = delete;
             TCPSocket& operator=(const TCPSocket&) = delete;
-            TCPSocket(TCPSocket&&) noexcept;
-            TCPSocket& operator=(TCPSocket&&) noexcept;
+            MOOTILS_API TCPSocket(TCPSocket&&) noexcept;
+            MOOTILS_API TCPSocket& operator=(TCPSocket&&) noexcept;
 
-            void disconnect() noexcept;
-            void adopt(socket_handle handle, bool connected = true) noexcept;
-            [[nodiscard]] bool is_connected() const noexcept;
+            MOOTILS_API void disconnect() noexcept;
+            MOOTILS_API void adopt(socket_handle handle, bool connected = true) noexcept;
+            MOOTILS_API [[nodiscard]] bool is_connected() const noexcept;
 
         protected:
             [[nodiscard]] SockResult open();
@@ -43,35 +43,33 @@ namespace sock {
             std::mutex m_send_mtx;
 
         public:
-            TCPClient();
-            ~TCPClient() = default;
-
+            MOOTILS_API TCPClient();
+            MOOTILS_API ~TCPClient();
             TCPClient(const TCPClient&) = delete;
             TCPClient& operator=(const TCPClient&) = delete;
             TCPClient(TCPClient&&) noexcept = delete;
             TCPClient& operator=(TCPClient&&) noexcept = delete;
 
-            [[nodiscard]] SockResult connect(const char* ip, uint16_t port);
-            [[nodiscard]] SockResult send(const void* data, const std::size_t size);
-            [[nodiscard]] SockResult send_all(const void* data, const std::size_t size);
-            [[nodiscard]] SockResult recv(void* data, const std::size_t size);
-            [[nodiscard]] SockResult recv_all(void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult connect(const char* ip, uint16_t port);
+            MOOTILS_API [[nodiscard]] SockResult send(const void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult send_all(const void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult recv(void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult recv_all(void* data, const std::size_t size);
     };
 
     // TCPServer will return std::shared_ptr<TCPClient> from accept()
     class TCPServer final : public TCPSocket {
         public:
-            TCPServer() = default;
-            ~TCPServer() = default;
-
+            MOOTILS_API TCPServer();
+            MOOTILS_API ~TCPServer();
             TCPServer(const TCPServer&) = delete;
             TCPServer& operator=(const TCPServer&) = delete;
             TCPServer(TCPServer&&) noexcept = delete;
             TCPServer& operator=(TCPServer&&) noexcept = delete;
 
-            [[nodiscard]] SockResult open_and_listen(uint16_t port, const char* ip = "0.0.0.0", std::int32_t backlog = 16);
-            [[nodiscard]] std::pair<std::shared_ptr<TCPClient>, SockResult> accept();
-            void request_stop() noexcept;
+            MOOTILS_API [[nodiscard]] SockResult open_and_listen(uint16_t port, const char* ip = "0.0.0.0", std::int32_t backlog = 16);
+            MOOTILS_API [[nodiscard]] std::pair<std::shared_ptr<TCPClient>, SockResult> accept();
+            MOOTILS_API void request_stop() noexcept;
 
         private:
             [[nodiscard]] SockResult bind(uint16_t port, const char* ip = "0.0.0.0");

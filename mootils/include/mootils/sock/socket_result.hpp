@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string_view>
+#include "mootils/api.hpp"
 
 namespace sock {
     enum class SockErr : std::uint8_t {
@@ -103,7 +104,7 @@ namespace sock {
         }
     };
 
-    SockErr map_err(int err) noexcept;
-    bool is_fatal_send_err(int e) noexcept;
-    bool is_fatal_recv_err(int e) noexcept;
+    MOOTILS_API SockErr map_err(int err) noexcept;
+    MOOTILS_API bool is_fatal_send_err(int e) noexcept;
+    MOOTILS_API bool is_fatal_recv_err(int e) noexcept;
 }

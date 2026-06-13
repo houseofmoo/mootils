@@ -4,6 +4,7 @@
 #include <string>
 #include "socket_result.hpp"
 #include "socket_defs.hpp"
+#include "mootils/api.hpp"
 
 namespace sock {
     struct UdpMcastConfig {
@@ -23,24 +24,23 @@ namespace sock {
             UdpMcastConfig m_cfg{};
 
         public:
-            UDPMulticastSocket();
-            ~UDPMulticastSocket();
-
+            MOOTILS_API UDPMulticastSocket();
+            MOOTILS_API ~UDPMulticastSocket();
             UDPMulticastSocket(const UDPMulticastSocket&) = delete;
             UDPMulticastSocket& operator=(const UDPMulticastSocket&) = delete;
-            UDPMulticastSocket(UDPMulticastSocket&&) noexcept;
-            UDPMulticastSocket& operator=(UDPMulticastSocket&&) noexcept;
+            MOOTILS_API UDPMulticastSocket(UDPMulticastSocket&&) noexcept;
+            MOOTILS_API UDPMulticastSocket& operator=(UDPMulticastSocket&&) noexcept;
 
-            [[nodiscard]] SockResult open_and_join(const UdpMcastConfig& cfg);
-            [[nodiscard]] SockResult send_broadcast(const void* data, size_t size) noexcept;
-            [[nodiscard]] SockResult recv_broadcast(void* data, size_t size) noexcept;
-            void close() noexcept;
+            MOOTILS_API [[nodiscard]] SockResult open_and_join(const UdpMcastConfig& cfg);
+            MOOTILS_API [[nodiscard]] SockResult send_broadcast(const void* data,std::size_t size) noexcept;
+            MOOTILS_API [[nodiscard]] SockResult recv_broadcast(void* data,std::size_t size) noexcept;
+            MOOTILS_API void close() noexcept;
 
             // shared implementation
             [[nodiscard]] bool is_open() const noexcept {
                 return m_open && handle_valid();
             }
-            
+
             void request_stop() noexcept {
                 close(); // breaks blocking recvfrom
             }

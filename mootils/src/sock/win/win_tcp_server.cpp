@@ -14,6 +14,9 @@ namespace sock {
         return static_cast<socket_handle>(handle);
     }
 
+    TCPServer::TCPServer() = default;
+    TCPServer::~TCPServer() = default;
+
     [[nodiscard]] SockResult TCPServer::open_and_listen(uint16_t port, const char* ip, std::int32_t backlog) {
         sock::SockResult result = open();
         if (!result.ok()) {

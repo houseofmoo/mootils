@@ -6,6 +6,7 @@
 #include <string_view>
 #include <string>
 #include <type_traits>
+#include "mootils/api.hpp"
 
 namespace seri::byte {
     // reads little-endian byte representation from provided buffer
@@ -17,34 +18,34 @@ namespace seri::byte {
         bool read_bytes(void* dst, std::size_t size);
 
     public:
-        explicit ByteReader(std::span<const std::byte> buf);
+        MOOTILS_API explicit ByteReader(std::span<const std::byte> buf);
 
-        [[nodiscard]] std::size_t size() const noexcept;
-        [[nodiscard]] std::size_t used() const noexcept;
-        [[nodiscard]] std::size_t remaining() const noexcept;
-        [[nodiscard]] bool empty() const noexcept;
-        void reset() noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t size() const noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t used() const noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t remaining() const noexcept;
+        MOOTILS_API [[nodiscard]] bool empty() const noexcept;
+        MOOTILS_API void reset() noexcept;
 
-        bool read_u8(std::uint8_t& out);
-        bool read_i8(std::int8_t& out);
-        bool read_byte(std::byte& out);
-        bool read_bool(bool& out);
+        MOOTILS_API bool read_u8(std::uint8_t& out);
+        MOOTILS_API bool read_i8(std::int8_t& out);
+        MOOTILS_API bool read_byte(std::byte& out);
+        MOOTILS_API bool read_bool(bool& out);
 
-        bool read_u16(std::uint16_t& out);
-        bool read_i16(std::int16_t& out);
+        MOOTILS_API bool read_u16(std::uint16_t& out);
+        MOOTILS_API bool read_i16(std::int16_t& out);
 
-        bool read_u32(std::uint32_t& out);
-        bool read_i32(std::int32_t& out);
+        MOOTILS_API bool read_u32(std::uint32_t& out);
+        MOOTILS_API bool read_i32(std::int32_t& out);
 
-        bool read_u64(std::uint64_t& out);
-        bool read_i64(std::int64_t& out);
+        MOOTILS_API bool read_u64(std::uint64_t& out);
+        MOOTILS_API bool read_i64(std::int64_t& out);
 
-        bool read_float(float& out);
-        bool read_double(double& out);
+        MOOTILS_API bool read_float(float& out);
+        MOOTILS_API bool read_double(double& out);
 
-        bool read_char(char& out);
-        bool read_string_view(std::string_view& out);
-        bool read_string(std::string& out);
+        MOOTILS_API bool read_char(char& out);
+        MOOTILS_API bool read_string_view(std::string_view& out);
+        MOOTILS_API bool read_string(std::string& out);
 
         template <typename Enum>
         bool read_enum32(Enum& out) {

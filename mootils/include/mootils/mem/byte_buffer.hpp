@@ -3,6 +3,7 @@
 #include <memory>
 #include <cstddef>
 #include <span>
+#include "mootils/api.hpp"
 
 namespace mem {
     // extremely simple thread UNSAFE memory block for temp storage
@@ -12,20 +13,20 @@ namespace mem {
         std::size_t m_size;
 
         public:
-        explicit ByteBuffer(std::size_t size);
-        ~ByteBuffer() = default;
+        MOOTILS_API explicit ByteBuffer(std::size_t size);
+        MOOTILS_API  ~ByteBuffer();
         ByteBuffer(const ByteBuffer&) = delete;
         ByteBuffer& operator=(const ByteBuffer&) = delete;
-        ByteBuffer(ByteBuffer&&) noexcept = default;
-        ByteBuffer& operator=(ByteBuffer&&) noexcept = default;
+        MOOTILS_API ByteBuffer(ByteBuffer&&) noexcept;
+        MOOTILS_API ByteBuffer& operator=(ByteBuffer&&) noexcept;
 
-        [[nodiscard]] std::byte* data() noexcept;
-        [[nodiscard]] const std::byte* data() const noexcept;
-        [[nodiscard]] std::size_t size() const noexcept;
-        [[nodiscard]] bool is_empty() const noexcept;
-        [[nodiscard]] std::span<std::byte> as_span() noexcept;
-        [[nodiscard]] std::span<const std::byte> as_span() const noexcept;
-        void zero_out() noexcept;
+        MOOTILS_API [[nodiscard]] std::byte* data() noexcept;
+        MOOTILS_API [[nodiscard]] const std::byte* data() const noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t size() const noexcept;
+        MOOTILS_API [[nodiscard]] bool is_empty() const noexcept;
+        MOOTILS_API [[nodiscard]] std::span<std::byte> as_span() noexcept;
+        MOOTILS_API [[nodiscard]] std::span<const std::byte> as_span() const noexcept;
+        MOOTILS_API void zero_out() noexcept;
 
         template <typename T>
         T* as() {

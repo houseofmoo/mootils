@@ -61,21 +61,31 @@
     #define DIAG_IGN_CONV
 #endif
 
-// export macros
-#define C_EXPORT extern "C"
+// // export macros
+// // #define C_EXPORT extern "C"
+// #define CPP_2_C_EXPORT extern "C"
 
-#if defined(_WIN32) || defined(__CYGWIN__)
-    #if defined(__GNUC__) || defined(__clang__)
-        #define DLL_EXPORT __attribute__((dllexport))
-        #define DLL_IMPORT __attribute__((dllimport))
-    #else
-        #define DLL_EXPORT __declspec(dllexport)
-        #define DLL_IMPORT __declspec(dllimport)
-    #endif
-#elif defined(__GNUC__) || defined(__clang__)
-    #define DLL_EXPORT __attribute__((visibility("default")))
-    #define DLL_IMPORT
-#else
-    #define DLL_EXPORT
-    #define DLL_IMPORT
-#endif
+// // #if defined(_WIN32) || defined(__CYGWIN__)
+// //     #if defined(__GNUC__) || defined(__clang__)
+// //         #define DLL_EXPORT __attribute__((dllexport))
+// //         #define DLL_IMPORT __attribute__((dllimport))
+// //     #else
+// //         #define DLL_EXPORT __declspec(dllexport)
+// //         #define DLL_IMPORT __declspec(dllimport)
+// //     #endif
+// // #elif defined(__GNUC__) || defined(__clang__)
+// //     #define DLL_EXPORT __attribute__((visibility("default")))
+// //     #define DLL_IMPORT
+// // #else
+// //     #define DLL_EXPORT
+// //     #define DLL_IMPORT
+// // #endif
+
+// // if compiling a shared library on windows with msvc, export symbols
+// #if defined(_WIN32) && defined(WIN32_SHARED_LIB) && defined(_MSC_VER)
+//     #define MOOTILS_EXPORT __declspec(dllexport)
+//     #define MOOTILS_IMPORT __declspec(dllimport)
+// #else
+//     #define MOOTILS_EXPORT
+//     #define MOOTILS_IMPORT
+// #endif

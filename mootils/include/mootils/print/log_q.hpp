@@ -5,6 +5,7 @@
 #include <sstream>
 #include <utility>
 #include <string_view>
+#include "mootils/api.hpp"
 
 namespace logr {
     namespace detail {
@@ -21,17 +22,17 @@ namespace logr {
             inline constexpr LogLvl compile_time_min_level = LogLvl::Debug;
         #else
             static_assert(
-                MOO_LOGQ_LOG_LEVEL == 0 || 
-                MOO_LOGQ_LOG_LEVEL == 1 || 
-                MOO_LOGQ_LOG_LEVEL == 2 || 
-                MOO_LOGQ_LOG_LEVEL == 3 || 
-                MOO_LOGQ_LOG_LEVEL == 99, 
+                MOO_LOGQ_LOG_LEVEL == 0 ||
+                MOO_LOGQ_LOG_LEVEL == 1 ||
+                MOO_LOGQ_LOG_LEVEL == 2 ||
+                MOO_LOGQ_LOG_LEVEL == 3 ||
+                MOO_LOGQ_LOG_LEVEL == 99,
                 "Invalid MOO_LOGQ_LOG_LEVEL. Use 0 (Debug), 1 (Info), 2 (Warning), 3 (Error), or 99 (None)"
             );
             inline constexpr LogLvl compile_time_min_level = static_cast<LogLvl>(MOO_LOGQ_LOG_LEVEL);
         #endif
 
-        void enqueue(std::string src, LogLvl lvl, std::string msg);
+        MOOTILS_API void enqueue(std::string src, LogLvl lvl, std::string msg);
 
         template <LogLvl Lvl>
         inline constexpr bool enabled() {
@@ -45,6 +46,9 @@ namespace logr {
                 std::ostringstream oss;
                 (oss << ... << std::forward<Args>(args));
                 detail::enqueue(std::string(src), Lvl, oss.str());
+            } else {
+                (void)src;
+                ((void)args, ...);
             }
         }
     }

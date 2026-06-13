@@ -36,7 +36,7 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "LOG_LEVEL": "Debug"
+        "MOO_LOG_LEVEL": "Debug"
       }
     },
     {
@@ -44,7 +44,22 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "LOG_LEVEL": "Warning"
+        "MOO_LOG_LEVEL": "Warning"
+      }
+    },
+
+    {
+      "name": "__shared_lib",
+      "hidden": true,
+      "cacheVariables": {
+        "MOOTILS_SHARED_LIB": "TRUE"
+      }
+    },
+    {
+      "name": "__static_lib",
+      "hidden": true,
+      "cacheVariables": {
+        "MOOTILS_SHARED_LIB": "FALSE"
       }
     },
 
@@ -69,76 +84,144 @@
     },
 
     {
-      "name": "linux-gnu-debug",
-      "inherits": ["__gnu-linux", "__debug"],
-      "displayName": "GNU Linux Debug"
+      "name": "linux-gnu-debug-shared",
+      "inherits": ["__gnu-linux", "__debug", "__shared_lib"],
+      "displayName": "GNU Linux Debug (Shared)"
     },
     {
-      "name": "linux-gnu-release",
-      "inherits": ["__gnu-linux", "__release"],
-      "displayName": "GNU Linux Release"
+      "name": "linux-gnu-release-shared",
+      "inherits": ["__gnu-linux", "__release", "__shared_lib"],
+      "displayName": "GNU Linux Release (Shared)"
+    },
+    {
+      "name": "linux-gnu-debug-static",
+      "inherits": ["__gnu-linux", "__debug", "__static_lib"],
+      "displayName": "GNU Linux Debug (Static)"
+    },
+    {
+      "name": "linux-gnu-release-static",
+      "inherits": ["__gnu-linux", "__release", "__static_lib"],
+      "displayName": "GNU Linux Release (Static)"
     },
 
     {
-      "name": "win-gnu-debug",
-      "inherits": ["__gnu-windows", "__debug"],
-      "displayName": "GNU Windows Debug"
+      "name": "win-gnu-debug-shared",
+      "inherits": ["__gnu-windows", "__debug", "__shared_lib"],
+      "displayName": "GNU Windows Debug (Shared)"
     },
     {
-      "name": "win-gnu-release",
-      "inherits": ["__gnu-windows", "__release"],
-      "displayName": "GNU Windows Release"
+      "name": "win-gnu-release-shared",
+      "inherits": ["__gnu-windows", "__release", "__shared_lib"],
+      "displayName": "GNU Windows Release (Shared)"
+    },
+    {
+      "name": "win-gnu-debug-static",
+      "inherits": ["__gnu-windows", "__debug", "__static_lib"],
+      "displayName": "GNU Windows Debug (Static)"
+    },
+    {
+      "name": "win-gnu-release-static",
+      "inherits": ["__gnu-windows", "__release", "__static_lib"],
+      "displayName": "GNU Windows Release (Static)"
     },
 
     {
-      "name": "win-msvc-debug",
-      "inherits": ["__msvc-windows", "__debug"],
-      "displayName": "MSVC Windows Debug"
+      "name": "win-msvc-debug-shared",
+      "inherits": ["__msvc-windows", "__debug", "__shared_lib"],
+      "displayName": "MSVC Windows Debug (Shared)"
     },
     {
-      "name": "win-msvc-release",
-      "inherits": ["__msvc-windows", "__release"],
-      "displayName": "MSVC Windows Release"
+      "name": "win-msvc-release-shared",
+      "inherits": ["__msvc-windows", "__release", "__shared_lib"],
+      "displayName": "MSVC Windows Release (Shared)"
+    },
+    {
+      "name": "win-msvc-debug-static",
+      "inherits": ["__msvc-windows", "__debug", "__static_lib"],
+      "displayName": "MSVC Windows Debug (Static)"
+    },
+    {
+      "name": "win-msvc-release-static",
+      "inherits": ["__msvc-windows", "__release", "__static_lib"],
+      "displayName": "MSVC Windows Release (Static)"
     }
   ],
   "buildPresets": [
     {
-      "name": "linux-gnu-debug",
-      "displayName": "GNU Linux Debug",
-      "configurePreset": "linux-gnu-debug",
+      "name": "linux-gnu-debug-shared",
+      "displayName": "GNU Linux Debug (Shared)",
+      "configurePreset": "linux-gnu-debug-shared",
       "jobs": 0
     },
     {
-      "name": "linux-gnu-release",
-      "displayName": "GNU Linux Release",
-      "configurePreset": "linux-gnu-release",
+      "name": "linux-gnu-release-shared",
+      "displayName": "GNU Linux Release (Shared)",
+      "configurePreset": "linux-gnu-release-shared",
+      "jobs": 0
+    },
+    {
+      "name": "linux-gnu-debug-static",
+      "displayName": "GNU Linux Debug (Static)",
+      "configurePreset": "linux-gnu-debug-static",
+      "jobs": 0
+    },
+    {
+      "name": "linux-gnu-release-static",
+      "displayName": "GNU Linux Release (Static)",
+      "configurePreset": "linux-gnu-release-static",
       "jobs": 0
     },
 
     {
-      "name": "win-gnu-debug",
-      "displayName": "GNU Windows Debug",
-      "configurePreset": "win-gnu-debug",
+      "name": "win-gnu-debug-shared",
+      "displayName": "GNU Windows Debug (Shared)",
+      "configurePreset": "win-gnu-debug-shared",
       "jobs": 0
     },
     {
-      "name": "win-gnu-release",
-      "displayName": "GNU Windows Release",
-      "configurePreset": "win-gnu-release",
+      "name": "win-gnu-release-shared",
+      "displayName": "GNU Windows Release (Shared)",
+      "configurePreset": "win-gnu-release-shared",
+      "jobs": 0
+    },
+    {
+      "name": "win-gnu-debug-static",
+      "displayName": "GNU Windows Debug (Static)",
+      "configurePreset": "win-gnu-debug-static",
+      "jobs": 0
+    },
+    {
+      "name": "win-gnu-release-static",
+      "displayName": "GNU Windows Release (Static)",
+      "configurePreset": "win-gnu-release-static",
       "jobs": 0
     },
 
     {
-      "name": "win-msvc-debug",
-      "displayName": "MSVC Windows Debug",
-      "configurePreset": "win-msvc-debug",
+      "name": "win-msvc-debug-shared",
+      "displayName": "MSVC Windows Debug (Shared)",
+      "configurePreset": "win-msvc-debug-shared",
       "configuration": "Debug",
       "jobs": 0
     },
     {
-      "name": "win-msvc-release",
-      "displayName": "MSVC Windows Release",
-      "configurePreset": "win-msvc-release",
+      "name": "win-msvc-release-shared",
+      "displayName": "MSVC Windows Release (Shared)",
+      "configurePreset": "win-msvc-release-shared",
+      "configuration": "Release",
+      "jobs": 0
+    },
+    {
+      "name": "win-msvc-debug-static",
+      "displayName": "MSVC Windows Debug (Static)",
+      "configurePreset": "win-msvc-debug-static",
+      "configuration": "Debug",
+      "jobs": 0
+    },
+    {
+      "name": "win-msvc-release-static",
+      "displayName": "MSVC Windows Release (Static)",
+      "configurePreset": "win-msvc-release-static",
       "configuration": "Release",
       "jobs": 0
     }

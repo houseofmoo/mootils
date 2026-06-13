@@ -3,25 +3,25 @@ set -euo pipefail
 
 # ============================================================
 # Usage:
-#   ./build.sh [--debug | --release] [--clean] [--run]
+#   ./builder.sh [--debug | --release] [--static | --shared] [--clean] [--run]
 # ------------------------------------------------------------
 # Examples:
-#   ./build.sh --debug
-#   ./build.sh --release --clean
+#   ./builder.sh --debug
+#   ./builder.sh --release --clean
 # ============================================================
 
-PRESET="linux-gnu-debug"
+PRESET="linux-gnu"
 BUILD_DIR="build"
+
+RELEASE="false"
+SHARED="false"
 CLEAN="false"
-RUN_AFTER_BUILD="false"
+RUN="false"
 
 # -------- parse args --------
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --run)
-      RUN_AFTER_BUILD="true"
-      shift
-      ;;
+
     --debug)
       PRESET="linux-gnu-debug"
       shift
@@ -30,8 +30,21 @@ while [[ $# -gt 0 ]]; do
       PRESET="linux-gnu-release"
       shift
       ;;
+    --static)
+      SHARED="true"
+      shift
+      ;;
+    --shared)
+      AS_SHARED_LIB="true"
+      shift
+      ;;
     --clean)
       CLEAN="true"
+      shift
+      ;;
+    --run)
+      # RUN_AFTER_BUILD="true"
+      echo "Warning: --run option is disabled for libraries, ignoring"
       shift
       ;;
     *)
@@ -52,6 +65,18 @@ if [[ "$CLEAN" == "true" ]]; then
     echo
     echo "Build directory \"$BUILD_DIR\" does not exist, skipping clean"
   fi
+fi
+
+if [[ "$RELEASE" == "true" ]]; then
+  PRESET="$PRESET-release"
+else
+  PRESET="$PRESET-debug"
+fi
+
+if [[ "$SHARED" == "true" ]]; then
+  PRESET="$PRESET-shared"
+else
+  PRESET="$PRESET-static"
 fi
 
 echo

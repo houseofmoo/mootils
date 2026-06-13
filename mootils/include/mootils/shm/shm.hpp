@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include <cstddef>
 #include <vector>
 #include <atomic>
+#include "mootils/api.hpp"
 
 namespace shm {
     enum class ShmErr {
@@ -87,39 +89,40 @@ namespace shm {
     class Shm {
         private:
             int32_t m_id;
-            size_t m_total_size;
+            std::size_t m_total_size;
             shm_handle m_handle;
             shm_view m_view;
 
         public:
-            Shm(const int32_t id, const size_t total_size);
+            MOOTILS_API Shm(const int32_t id, const std::size_t total_size);
             virtual ~Shm() { close(); }
 
             Shm(const Shm&) = delete;
             Shm& operator=(const Shm&) = delete;
-            Shm(Shm&&) noexcept;
-            Shm& operator=(Shm&&) noexcept;
-            
+            MOOTILS_API Shm(Shm&&) noexcept;
+            MOOTILS_API Shm& operator=(Shm&&) noexcept;
+
             // platform dependent
-            [[nodiscard]] bool is_valid() const noexcept;
-            std::string name() const noexcept;
-            [[nodiscard]] ShmResult create();
-            [[nodiscard]] ShmResult open();
-            void close() noexcept;
+            MOOTILS_API [[nodiscard]] bool is_valid() const noexcept;
+            MOOTILS_API std::string name() const noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult create();
+            MOOTILS_API [[nodiscard]] ShmResult open();
+            MOOTILS_API void close() noexcept;
 
             // shared implementation
-            void memset(size_t offset, int32_t val, size_t bytes);
-            size_t total_size() const noexcept;
-            [[nodiscard]] ShmResult read(void* buf, const size_t size, const size_t offset) const noexcept;
-            [[nodiscard]] ShmResult write(const void* buf, const size_t size, const size_t offset) noexcept;
+            MOOTILS_API void memset(std::size_t offset, int32_t val, std::size_t bytes);
+            MOOTILS_API std::size_t total_size() const noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult read(void* buf, const std::size_t size, const std::size_t offset) const noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult write(const void* buf, const std::size_t size, const std::size_t offset) noexcept;
+
             template <typename T>
-            T* map_to_type(size_t offset) const { 
+            T* as(std::size_t offset) const {
                 if (offset > m_total_size) return nullptr;
                 if (sizeof(T) > (m_total_size - offset)) return nullptr;
 
                 return reinterpret_cast<T*>(
                     static_cast<std::byte*>(m_view) + offset
-                ); 
+                );
             }
     };
 }

@@ -13,6 +13,7 @@
 
 namespace sock {
     TCPClient::TCPClient() : TCPSocket() {}
+    TCPClient::~TCPClient() = default;
 
     SockResult TCPClient::connect(const char* ip, uint16_t port) {
         // pseudo-validate ip

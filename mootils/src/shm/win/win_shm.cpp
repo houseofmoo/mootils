@@ -2,6 +2,7 @@
 
 #include "mootils/shm/shm.hpp"
 #include "windows_hdr.hpp"
+#include <cstddef>
 
 namespace shm {
     // static HANDLE as_native(shm_handle h) noexcept {
@@ -23,10 +24,10 @@ namespace shm {
         return out;
     }
 
-    Shm::Shm(const int32_t id, const size_t total_size) : 
+    Shm::Shm(const int32_t id, const std::size_t total_size) :
         m_id(id), m_total_size(total_size), m_handle(nullptr), m_view(nullptr) {}
 
-    Shm::Shm(Shm&& other) noexcept : 
+    Shm::Shm(Shm&& other) noexcept :
         m_id(other.m_id),
         m_total_size(other.m_total_size),
         m_handle(other.m_handle),
@@ -99,7 +100,7 @@ namespace shm {
             close();
             return { ShmErr::FileMapFailed, ShmOp::Create };
         }
- 
+
         return { ShmErr::None, ShmOp::Create };
     }
 
@@ -129,7 +130,7 @@ namespace shm {
             m_handle = nullptr;
             return { ShmErr::FileMapFailed, ShmOp::Open };
         }
-   
+
         return { ShmErr::None, ShmOp::Open };
     }
 

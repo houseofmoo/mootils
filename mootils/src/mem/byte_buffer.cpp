@@ -5,6 +5,10 @@ namespace mem {
     ByteBuffer::ByteBuffer(std::size_t size)
         : m_buf{std::make_unique<std::byte[]>(size)}, m_size{size} {}
 
+    ByteBuffer::~ByteBuffer() = default;
+    ByteBuffer::ByteBuffer(ByteBuffer&&) noexcept = default;
+    ByteBuffer& ByteBuffer::operator=(ByteBuffer&&) noexcept = default;
+
     std::byte* ByteBuffer::data() noexcept {
         return m_buf.get();
     }

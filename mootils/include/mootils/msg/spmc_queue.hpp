@@ -16,7 +16,7 @@ namespace msg {
         static_assert((NumSlots & (NumSlots-1)) == 0, "SPMCQueue size must be a power of 2 for efficient modulo operation");
         static_assert(std::is_trivially_copyable_v<T>, "SPMCQueue only supports trivially copyable types");
         static_assert(MaxConsumers > 0, "SPMCQueue MaxConsumers must be > 0");
-        
+
         static constexpr std::size_t mask = NumSlots - 1;
         static constexpr std::size_t to_index(std::uint64_t i) noexcept { return static_cast<std::size_t>(i) & mask; }
 
@@ -84,7 +84,7 @@ namespace msg {
                 if (tail >= head) {
                     return std::nullopt; // queue is empty
                 }
-                
+
                 T out = m_buffer[to_index(tail)];
                 m_slots[idx].tail.store(tail + 1, std::memory_order_release);
                 return out;
@@ -97,7 +97,7 @@ namespace msg {
                 if (tail >= head) {
                     return false; // queue is empty
                 }
-                
+
                 out = m_buffer[to_index(tail)];
                 m_slots[idx].tail.store(tail + 1, std::memory_order_release);
                 return true;
@@ -110,7 +110,7 @@ namespace msg {
                 if (tail >= head) {
                     return std::nullopt; // queue is empty
                 }
-                
+
                 return m_buffer[to_index(tail)];
             }
 
@@ -121,7 +121,7 @@ namespace msg {
                 if (tail >= head) {
                     return false; // queue is empty
                 }
-                
+
                 out = m_buffer[to_index(tail)];
                 return true;
             }
@@ -131,7 +131,7 @@ namespace msg {
                 const auto tail = m_slots[idx].tail.load(std::memory_order_relaxed);
 
                 const auto diff = head - tail;
-                if (diff > NumSlots) { 
+                if (diff > NumSlots) {
                     return NumSlots; // overflow
                 }
                 return static_cast<std::size_t>(diff);
@@ -142,12 +142,12 @@ namespace msg {
                 const auto min_tail = min_tail_snapshot(head);
 
                 const auto diff = head - min_tail;
-                if (diff > NumSlots) { 
+                if (diff > NumSlots) {
                     return NumSlots; // overflow
                 }
                 return static_cast<std::size_t>(diff);
             }
-        
+
         public:
             SPMCQueue() = default;
             ~SPMCQueue() = default;
@@ -163,7 +163,7 @@ namespace msg {
 
                 public:
                     explicit Producer(SPMCQueue& q) noexcept : m_queue(&q) {}
-                    
+
                     ~Producer() {
                         if (m_queue != nullptr) {
                             m_queue->m_producer_claimed.store(false, std::memory_order_release);
@@ -172,7 +172,7 @@ namespace msg {
 
                     Producer(const Producer&) = delete;
                     Producer& operator=(const Producer&) = delete;
-                    
+
                     Producer(Producer&& other) noexcept : m_queue(other.m_queue) {
                         other.m_queue = nullptr;
                     }
@@ -213,7 +213,7 @@ namespace msg {
 
                 public:
                     Consumer() = default;
-                    Consumer(SPMCQueue& q, std::size_t slot_idx) noexcept : 
+                    Consumer(SPMCQueue& q, std::size_t slot_idx) noexcept :
                         m_queue(&q), m_slot_idx(slot_idx) {}
 
                     ~Consumer() {
@@ -225,12 +225,12 @@ namespace msg {
 
                     Consumer(const Consumer&) = delete;
                     Consumer& operator=(const Consumer&) = delete;
-                    
-                    Consumer(Consumer&& other) noexcept : 
+
+                    Consumer(Consumer&& other) noexcept :
                         m_queue(other.m_queue), m_slot_idx(other.m_slot_idx) {
                         other.m_queue = nullptr;
                     }
-                    
+
                     Consumer& operator=(Consumer&& other) noexcept {
                         if (this != &other) {
                             if (m_queue != nullptr) {

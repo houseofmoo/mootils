@@ -1,6 +1,7 @@
 #pragma once
 #include <thread>
 #include <string>
+#include "mootils/api.hpp"
 
 namespace plat {
     #if defined(MOO_WIN32)
@@ -9,11 +10,11 @@ namespace plat {
         using sem_handle = void*;
     #endif
 
-    [[nodiscard]] int signal_sem(sem_handle sem);
-    [[nodiscard]] int try_signal_sem(sem_handle sem);
+    MOOTILS_API [[nodiscard]] int signal_sem(sem_handle sem);
+    MOOTILS_API [[nodiscard]] int try_signal_sem(sem_handle sem);
 
-    void affinitize_thread(std::thread& t, uint32_t cpu);
-    void affinitize_current_thread(uint32_t cpu);
-    void affinitize_current_thread_to_current_cpu();
-    std::string timestamp_str();
+    MOOTILS_API void affinitize_thread(std::thread& t, uint32_t cpu);
+    MOOTILS_API void affinitize_current_thread(uint32_t cpu);
+    MOOTILS_API void affinitize_current_thread_to_current_cpu();
+    MOOTILS_API std::string timestamp_str();
 }

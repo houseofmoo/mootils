@@ -13,19 +13,19 @@ namespace sock {
         return static_cast<socket_handle>(h);
     }
 
-    
+
     bool UDPMulticastSocket::handle_valid() const noexcept {
-         return m_handle != INVALID_SOCKET; 
+         return m_handle != INVALID_SOCKET;
     }
 
-    UDPMulticastSocket::UDPMulticastSocket() 
+    UDPMulticastSocket::UDPMulticastSocket()
         : m_handle(INVALID_SOCKET), m_open(false), m_joined(false), m_cfg{} {}
 
     UDPMulticastSocket::~UDPMulticastSocket() {
-        close(); 
+        close();
     }
 
-    UDPMulticastSocket::UDPMulticastSocket(UDPMulticastSocket&& other) noexcept : 
+    UDPMulticastSocket::UDPMulticastSocket(UDPMulticastSocket&& other) noexcept :
         m_handle(std::exchange(other.m_handle, INVALID_SOCKET)),
         m_open(std::exchange(other.m_open, false)),
         m_joined(std::exchange(other.m_joined, false)),
@@ -65,9 +65,9 @@ namespace sock {
         if (cfg.reuse_addr) {
             BOOL reuse = TRUE;
             ::setsockopt(
-                as_native(m_handle), 
-                SOL_SOCKET, 
-                SO_REUSEADDR, 
+                as_native(m_handle),
+                SOL_SOCKET,
+                SO_REUSEADDR,
                 reinterpret_cast<const char*>(&reuse),
                  sizeof(reuse)
             );
@@ -117,7 +117,7 @@ namespace sock {
             result.code = SockErr::InvalidIp;
             return result;
         }
-        
+
         mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 
         if (::setsockopt(as_native(m_handle), IPPROTO_IP, IP_ADD_MEMBERSHIP,
@@ -134,7 +134,7 @@ namespace sock {
         return result;
     }
 
-    SockResult UDPMulticastSocket::send_broadcast(const void* data, size_t size) noexcept {
+    SockResult UDPMulticastSocket::send_broadcast(const void* data,std::size_t size) noexcept {
         SockResult result{};
         result.op = SockOp::Send;
 
@@ -170,7 +170,7 @@ namespace sock {
         return result;
     }
 
-    SockResult UDPMulticastSocket::recv_broadcast(void* data, size_t size) noexcept {
+    SockResult UDPMulticastSocket::recv_broadcast(void* data,std::size_t size) noexcept {
         SockResult result{};
         result.op = SockOp::Recv;
 

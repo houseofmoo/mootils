@@ -1,6 +1,7 @@
 #pragma once
 #include <string_view>
 #include <cstdint>
+#include "mootils/api.hpp"
 
 namespace evt {
     enum class SemErr {
@@ -17,7 +18,7 @@ namespace evt {
         TryWait,
         Wait
     };
-    
+
     struct SemResult {
         SemErr code;
         SemOp op;
@@ -61,18 +62,18 @@ namespace evt {
             std::uint32_t m_max_count = 0;
 
         public:
-            Semaphore();
-            explicit Semaphore(std::uint32_t max_count);
-            ~Semaphore();
+            MOOTILS_API Semaphore();
+            MOOTILS_API explicit Semaphore(std::uint32_t max_count);
+            MOOTILS_API ~Semaphore();
 
             Semaphore(const Semaphore&) = delete;
             Semaphore& operator=(const Semaphore&) = delete;
-            Semaphore(Semaphore&& other) noexcept;
-            Semaphore& operator=(Semaphore&& other) noexcept;
+            MOOTILS_API Semaphore(Semaphore&& other) noexcept;
+            MOOTILS_API Semaphore& operator=(Semaphore&& other) noexcept;
 
-            [[nodiscard]] SemResult post();
-            [[nodiscard]] SemResult try_wait();
-            [[nodiscard]] SemResult wait(std::uint32_t milliseconds = 0);
-            void close();
+            MOOTILS_API [[nodiscard]] SemResult post();
+            MOOTILS_API [[nodiscard]] SemResult try_wait();
+            MOOTILS_API [[nodiscard]] SemResult wait(std::uint32_t milliseconds = 0);
+            MOOTILS_API void close();
     };
 }

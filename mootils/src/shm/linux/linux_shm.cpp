@@ -16,7 +16,7 @@ namespace shm {
     //     return static_cast<shm_handle>(fd);
     // }
 
-    Shm::Shm(const int32_t id, const size_t total_size) : 
+    Shm::Shm(const int32_t id, conststd::size_t total_size) :
         m_id(id), m_total_size(total_size), m_handle(-1), m_view(nullptr) {}
 
     Shm::Shm(Shm&& other) noexcept
@@ -71,7 +71,7 @@ namespace shm {
             return { ShmErr::UnknownError, ShmOp::Create };
         }
 
-        const size_t total = total_size();
+        conststd::size_t total = total_size();
         if (::ftruncate(m_handle, static_cast<off_t>(total)) != 0) {
             ::close(m_handle);
             ::shm_unlink(n.c_str()); // delete the partially created file
@@ -84,7 +84,7 @@ namespace shm {
             ::shm_unlink(n.c_str()); // delete the partially created file
             return { ShmErr::FileMapFailed, ShmOp::Create };
         }
-       
+
         return { ShmErr::None, ShmOp::Create };
     }
 
@@ -113,7 +113,7 @@ namespace shm {
             return { ShmErr::SizeMismatch, ShmOp::Open };
         }
 
-        const size_t total = total_size();
+        conststd::size_t total = total_size();
         m_view = ::mmap(nullptr, total, PROT_READ | PROT_WRITE, MAP_SHARED, m_handle, 0);
         if (m_view == MAP_FAILED) {
             ::close(m_handle);
@@ -124,7 +124,7 @@ namespace shm {
     }
 
     void Shm::close() noexcept {
-        const size_t total = total_size();
+        conststd::size_t total = total_size();
 
         if (m_view != nullptr) {
             ::munmap(m_view, total);

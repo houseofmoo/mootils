@@ -19,8 +19,8 @@ namespace sock {
     UDPMulticastSocket::UDPMulticastSocket()
         : m_handle(INVALID_SOCKET), m_open(false), m_joined(false), m_cfg{} {}
 
-    UDPMulticastSocket::~UDPMulticastSocket() { 
-        close(); 
+    UDPMulticastSocket::~UDPMulticastSocket() {
+        close();
     }
 
     UDPMulticastSocket::UDPMulticastSocket(UDPMulticastSocket&& o) noexcept
@@ -124,7 +124,7 @@ namespace sock {
         return result;
     }
 
-    SockResult UDPMulticastSocket::send_broadcast(const void* data, size_t size) noexcept {
+    SockResult UDPMulticastSocket::send_broadcast(const void* data,std::size_t size) noexcept {
         SockResult result{};
         result.op = SockOp::Send;
 
@@ -162,7 +162,7 @@ namespace sock {
         return result;
     }
 
-    SockResult UDPMulticastSocket::recv_broadcast(void* data, size_t size) noexcept {
+    SockResult UDPMulticastSocket::recv_broadcast(void* data,std::size_t size) noexcept {
         SockResult result{};
         result.op = SockOp::Recv;
 

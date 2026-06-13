@@ -6,6 +6,8 @@ namespace mem {
         m_size{size},
         m_offset{0} { }
 
+    Arena::~Arena() = default;
+
     std::optional<std::span<std::byte>> Arena::allocate(std::size_t size) noexcept {
         if (size == 0 || size > remaining()) {
             return std::nullopt;

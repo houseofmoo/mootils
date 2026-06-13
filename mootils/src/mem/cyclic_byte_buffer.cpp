@@ -1,6 +1,10 @@
 #include "mootils/mem/cyclic_byte_buffer.hpp"
 
 namespace mem {
+    CyclicByteBuffer::CyclicByteBuffer(std::size_t size) : m_buf{size}, m_offset{0} {}
+    CyclicByteBuffer::~CyclicByteBuffer() = default;
+    CyclicByteBuffer::CyclicByteBuffer(CyclicByteBuffer&&) noexcept = default;
+    CyclicByteBuffer& CyclicByteBuffer::operator=(CyclicByteBuffer&&) noexcept = default;
     std::byte* CyclicByteBuffer::data() noexcept {
         return m_buf.data();
     }

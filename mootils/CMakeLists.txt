@@ -16,10 +16,16 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # build as library
-add_library(${PROJECT_NAME} STATIC)
-# shared does not work on MSCV due to me not setting the dllexport macros on the interface
-#add_library(${PROJECT_NAME} SHARED)
-add_library(util::mootils ALIAS ${PROJECT_NAME})
+if (MOOTILS_SHARED_LIB)
+    message(STATUS "Building as shared library")
+    add_library(${PROJECT_NAME} SHARED)
+    add_library(util::mootils ALIAS ${PROJECT_NAME})
+else()
+    message(STATUS "Building as static library")
+    add_library(${PROJECT_NAME} STATIC)
+    add_library(util::mootils ALIAS ${PROJECT_NAME})
+endif()
+
 
 # require language standards for ourselves and consumers of this library
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20 c_std_11)
@@ -50,23 +56,23 @@ message(STATUS "==============================")
 message(STATUS "")
 
 # parse log level from arguments, error if not set
-set(LOG_LEVEL "Debug" CACHE STRING "Set log level (Debug, Info, Warning, Error, None)")
-set_property(CACHE LOG_LEVEL PROPERTY STRINGS Debug Info Warning Error None)
-if(LOG_LEVEL STREQUAL "Debug")
+set(MOO_LOG_LEVEL "Debug" CACHE STRING "Set log level (Debug, Info, Warning, Error, None)")
+set_property(CACHE MOO_LOG_LEVEL PROPERTY STRINGS Debug Info Warning Error None)
+if(MOO_LOG_LEVEL STREQUAL "Debug")
     message(STATUS "Log level set to DEBUG")
-    set(LOG_LEVEL_VALUE 0)
-elseif(LOG_LEVEL STREQUAL "Info")
+    set(MOO_LOG_LEVEL_VALUE 0)
+elseif(MOO_LOG_LEVEL STREQUAL "Info")
     message(STATUS "Log level set to INFO")
-    set(LOG_LEVEL_VALUE 1)
-elseif(LOG_LEVEL STREQUAL "Warning")
+    set(MOO_LOG_LEVEL_VALUE 1)
+elseif(MOO_LOG_LEVEL STREQUAL "Warning")
     message(STATUS "Log level set to WARNING")
-    set(LOG_LEVEL_VALUE 2)
-elseif(LOG_LEVEL STREQUAL "Error")
+    set(MOO_LOG_LEVEL_VALUE 2)
+elseif(MOO_LOG_LEVEL STREQUAL "Error")
     message(STATUS "Log level set to ERROR")
-    set(LOG_LEVEL_VALUE 3)
-elseif(LOG_LEVEL STREQUAL "None")
+    set(MOO_LOG_LEVEL_VALUE 3)
+elseif(MOO_LOG_LEVEL STREQUAL "None")
     message(STATUS "Log level set to NONE")
-    set(LOG_LEVEL_VALUE 99)
+    set(MOO_LOG_LEVEL_VALUE 99)
 else()
     message(FATAL_ERROR " Invalid LOG_LEVEL: ${LOG_LEVEL}. Use Debug, Info, Warning, Error, or None")
 endif()
@@ -76,7 +82,10 @@ target_compile_definitions(${PROJECT_NAME}
     PUBLIC
         $<$<PLATFORM_ID:Windows>:MOO_WIN32>
         $<$<PLATFORM_ID:Linux>:MOO_LINUX>
-        MOO_LOGQ_LOG_LEVEL=${LOG_LEVEL_VALUE}
+        MOO_LOGQ_LOG_LEVEL=${MOO_LOG_LEVEL_VALUE}
+        MOOTILS_AS_SHARED_LIB=$<BOOL:${MOOTILS_SHARED_LIB}>
+    PRIVATE
+        MOOTILS_LIB_BUILD
 )
 
 # source files

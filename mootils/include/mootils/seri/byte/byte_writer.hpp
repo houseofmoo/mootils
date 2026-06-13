@@ -5,6 +5,7 @@
 #include <string_view>
 #include <span>
 #include <type_traits>
+#include "mootils/api.hpp"
 
 namespace seri::byte {
     // writes byte representation as little endian to provided buffer
@@ -16,33 +17,33 @@ namespace seri::byte {
         std::size_t write_bytes(const void* src, std::size_t size);
 
         public:
-        explicit ByteWriter(std::span<std::byte> buf);
+        MOOTILS_API explicit ByteWriter(std::span<std::byte> buf);
 
-        [[nodiscard]] std::size_t size() const noexcept;
-        [[nodiscard]] std::size_t used() const noexcept;
-        [[nodiscard]] std::size_t space_available() const noexcept;
-        [[nodiscard]] std::span<std::byte> written() const noexcept;
-        void reset() noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t size() const noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t used() const noexcept;
+        MOOTILS_API [[nodiscard]] std::size_t space_available() const noexcept;
+        MOOTILS_API [[nodiscard]] std::span<std::byte> written() const noexcept;
+        MOOTILS_API void reset() noexcept;
 
-        std::size_t write_u8(const std::uint8_t val);
-        std::size_t write_i8(const std::int8_t val);
-        std::size_t write_byte(const std::byte val);
-        std::size_t write_bool(const bool val);
+        MOOTILS_API std::size_t write_u8(const std::uint8_t val);
+        MOOTILS_API std::size_t write_i8(const std::int8_t val);
+        MOOTILS_API std::size_t write_byte(const std::byte val);
+        MOOTILS_API std::size_t write_bool(const bool val);
 
-        std::size_t write_u16(const std::uint16_t val);
-        std::size_t write_i16(const std::int16_t val);
+        MOOTILS_API std::size_t write_u16(const std::uint16_t val);
+        MOOTILS_API std::size_t write_i16(const std::int16_t val);
 
-        std::size_t write_u32(const std::uint32_t val);
-        std::size_t write_i32(const std::int32_t val);
+        MOOTILS_API std::size_t write_u32(const std::uint32_t val);
+        MOOTILS_API std::size_t write_i32(const std::int32_t val);
 
-        std::size_t write_u64(const std::uint64_t val);
-        std::size_t write_i64(const std::int64_t val);
+        MOOTILS_API std::size_t write_u64(const std::uint64_t val);
+        MOOTILS_API std::size_t write_i64(const std::int64_t val);
 
-        std::size_t write_float(const float val);
-        std::size_t write_double(const double val);
+        MOOTILS_API std::size_t write_float(const float val);
+        MOOTILS_API std::size_t write_double(const double val);
 
-        std::size_t write_char(const char val);
-        std::size_t write_string(const std::string_view str);
+        MOOTILS_API std::size_t write_char(const char val);
+        MOOTILS_API std::size_t write_string(const std::string_view str);
 
         template <typename Enum>
         std::size_t write_enum32(const Enum val) noexcept {
