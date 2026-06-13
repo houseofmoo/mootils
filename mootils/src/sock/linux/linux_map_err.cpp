@@ -55,6 +55,25 @@ namespace sock {
         }
     }
 
+
+    bool is_fatal_recv_err(int e) noexcept {
+        switch (e) {
+            case ECONNRESET:     // peer reset connection
+            case ECONNABORTED:   // connection aborted locally/stack
+            case ENOTCONN:       // socket is not connected
+            case ESHUTDOWN:      // socket has been shut down
+            case ENETDOWN:       // network subsystem failed
+            case ENETRESET:      // connection broken due to keep-alive/network reset
+            case ENETUNREACH:    // network unreachable
+            case EHOSTUNREACH:   // host unreachable
+            case ETIMEDOUT:      // connection timed out
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
 }
 
 #endif

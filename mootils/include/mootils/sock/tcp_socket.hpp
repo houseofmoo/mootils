@@ -3,10 +3,12 @@
 #include <mutex>
 #include <memory>
 #include <cstdint>
+#include <cstddef>
 #include "socket_result.hpp"
 #include "socket_defs.hpp"
 
 namespace sock {
+    // raw socket handle wrapper. Use TCPClient or TCPServer instead of TCPSocket directly
     class TCPSocket {
         protected:
             socket_handle m_handle;
@@ -21,30 +23,18 @@ namespace sock {
             TCPSocket(TCPSocket&&) noexcept;
             TCPSocket& operator=(TCPSocket&&) noexcept;
 
-            [[nodiscard]] SockResult open();
-            void shutdown() noexcept;
-            void close() noexcept;
-
-            // shared implementation
-            [[nodiscard]] bool is_connected() const noexcept {
-                return m_connected && handle_valid();
-            }
-
-            void adopt(socket_handle handle, bool connected = true) noexcept {
-                close();
-                m_handle = handle;
-                m_connected = connected;
-            }
-
-            void disconnect() noexcept {
-                shutdown();
-                close();
-            }
+            void disconnect() noexcept;
+            void adopt(socket_handle handle, bool connected = true) noexcept;
+            [[nodiscard]] bool is_connected() const noexcept;
 
         protected:
-            bool handle_valid() const noexcept;
+            [[nodiscard]] SockResult open();
+            bool is_handle_valid() const noexcept;
+            void shutdown() noexcept;
+            void close() noexcept;
     };
 
+    // TCPClient has thread safe sends but thread UNSAFE recvs
     class TCPClient final : public TCPSocket {
         private:
             // to prevent any chance of a send being interrupted and data arriving at
@@ -58,24 +48,17 @@ namespace sock {
 
             TCPClient(const TCPClient&) = delete;
             TCPClient& operator=(const TCPClient&) = delete;
-            TCPClient(TCPClient&&) = delete;
-            TCPClient& operator=(TCPClient&&) = delete;
+            TCPClient(TCPClient&&) noexcept = delete;
+            TCPClient& operator=(TCPClient&&) noexcept = delete;
 
             [[nodiscard]] SockResult connect(const char* ip, uint16_t port);
-            [[nodiscard]] SockResult send(const void* data, const size_t size);
-            [[nodiscard]] SockResult send_all(const void* data, const size_t size);
-            [[nodiscard]] SockResult recv(void* data, const size_t size);
-            [[nodiscard]] SockResult recv_all(void* data, const size_t size);
-
-            [[nodiscard]] SockResult open_and_connect(const char* ip, uint16_t port) {
-                const sock::SockResult open_err = open();
-                if (open_err.code != SockErr::None) {
-                    return open_err;
-                }
-                return connect(ip, port);
-            }
+            [[nodiscard]] SockResult send(const void* data, const std::size_t size);
+            [[nodiscard]] SockResult send_all(const void* data, const std::size_t size);
+            [[nodiscard]] SockResult recv(void* data, const std::size_t size);
+            [[nodiscard]] SockResult recv_all(void* data, const std::size_t size);
     };
 
+    // TCPServer will return std::shared_ptr<TCPClient> from accept()
     class TCPServer final : public TCPSocket {
         public:
             TCPServer() = default;
@@ -83,23 +66,16 @@ namespace sock {
 
             TCPServer(const TCPServer&) = delete;
             TCPServer& operator=(const TCPServer&) = delete;
-            TCPServer(TCPServer&&) = default;
-            TCPServer& operator=(TCPServer&&) = default;
+            TCPServer(TCPServer&&) noexcept = delete;
+            TCPServer& operator=(TCPServer&&) noexcept = delete;
 
-            [[nodiscard]] SockResult bind(uint16_t port, const char* ip = "0.0.0.0");
-            [[nodiscard]] SockResult listen(int backlog = 0);
+            [[nodiscard]] SockResult open_and_listen(uint16_t port, const char* ip = "0.0.0.0", std::int32_t backlog = 16);
             [[nodiscard]] std::pair<std::shared_ptr<TCPClient>, SockResult> accept();
+            void request_stop() noexcept;
 
-            [[nodiscard]] SockResult open_and_listen(uint16_t port, const char* ip = "0.0.0.0") {
-                sock::SockResult result = open();
-                if (!result.ok()) return result;
+        private:
+            [[nodiscard]] SockResult bind(uint16_t port, const char* ip = "0.0.0.0");
+            [[nodiscard]] SockResult listen(int backlog);
 
-                result = bind(port, ip);
-                if (!result.ok()) return result;
-
-                return listen(0);
-            }
-
-            void request_stop() noexcept { close(); }
     };
 }

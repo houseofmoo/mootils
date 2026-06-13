@@ -9,13 +9,13 @@ namespace sock {
         NotInitialized,      // WSAStartup missing (windows)
         InvalidHandle,       // not a socket / invalid
         InvalidArgument,     // bad params, invalid IP, etc.
- 
+
         NotOpen,             // your state: no socket created
         NotConnected,        // your state
         AlreadyConnected,    // your state
         Closed,              // orderly close (recv=0) or local close
         Shutdown,            // local shutdown called
- 
+
         AddressInUse,        // bind
         AddressNotAvailable, // bind/connect destination issues
         PermissionDenied,    // bind priv ports / policy
@@ -23,9 +23,9 @@ namespace sock {
         TimedOut,            // connect / maybe recv if timeouts configured
         Unreachable,         // host/net unreachable
         ResourceExhausted,   // ENOBUFS/EMFILE etc.
- 
+
         WouldBlock,          // future non-blocking
- 
+
         DoubleOpen,          // other checks we do internally unrelated to system errors
         InvalidIp,
         SizeZero,
@@ -35,16 +35,16 @@ namespace sock {
 
     enum class SockOp : std::uint8_t {
         Configure,
-        Open, 
+        Open,
         Bind,
         Join,
-        Listen, 
-        Accept, 
-        Connect, 
+        Listen,
+        Accept,
+        Connect,
         Send,
-        Recv, 
-        Shutdown, 
-        Close 
+        Recv,
+        Shutdown,
+        Close
     };
 
     struct SockResult {
@@ -88,15 +88,15 @@ namespace sock {
         std::string_view op_to_string() const noexcept {
             switch (op) {
                 case SockOp::Configure: return "Configure";
-                case SockOp::Open: return "Open"; 
+                case SockOp::Open: return "Open";
                 case SockOp::Bind: return "Bind";
                 case SockOp::Join: return "Join";
-                case SockOp::Listen: return "Listen"; 
-                case SockOp::Accept: return "Accept"; 
-                case SockOp::Connect: return "Connect"; 
+                case SockOp::Listen: return "Listen";
+                case SockOp::Accept: return "Accept";
+                case SockOp::Connect: return "Connect";
                 case SockOp::Send: return "Send";
-                case SockOp::Recv: return "Recv"; 
-                case SockOp::Shutdown: return "Shutdown"; 
+                case SockOp::Recv: return "Recv";
+                case SockOp::Shutdown: return "Shutdown";
                 case SockOp::Close: return "Close";
                 default: return "Unknown - op is undefined";
             }
@@ -105,4 +105,5 @@ namespace sock {
 
     SockErr map_err(int err) noexcept;
     bool is_fatal_send_err(int e) noexcept;
+    bool is_fatal_recv_err(int e) noexcept;
 }

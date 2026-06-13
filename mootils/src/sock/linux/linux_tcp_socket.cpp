@@ -11,14 +11,6 @@
 #include <errno.h>
 
 namespace sock {
-    // static int as_native(socket_handle handle) noexcept {
-    //     return static_cast<int>(handle);
-    // }
-
-    // static socket_handle from_native(int fd) noexcept {
-    //     return static_cast<socket_handle>(fd);
-    // }
-
     TCPSocket::TCPSocket() : m_handle(INVALID_SOCKET), m_connected(false) {}
 
     TCPSocket::~TCPSocket() {
@@ -31,25 +23,35 @@ namespace sock {
 
     TCPSocket& TCPSocket::operator=(TCPSocket&& other) noexcept {
         if (this != &other) {
-            close();
+            disconnect();
             m_handle = std::exchange(other.m_handle, INVALID_SOCKET);
             m_connected = std::exchange(other.m_connected, false);
         }
         return *this;
     }
 
-    bool TCPSocket::handle_valid() const noexcept {
-        return m_handle != INVALID_SOCKET;
+    void TCPSocket::disconnect() noexcept {
+        shutdown();
+        close();
+    }
+
+    void TCPSocket::adopt(socket_handle handle, bool connected) noexcept {
+        disconnect();
+        m_handle = handle;
+        m_connected = connected;
+    }
+
+    [[nodiscard]] bool TCPSocket::is_connected() const noexcept {
+        return m_connected && is_handle_valid();
     }
 
     SockResult TCPSocket::open() {
-        if (handle_valid()) {
+        if (is_handle_valid()) {
             return SockResult{ SockErr::DoubleOpen, SockOp::Open, 0, 0 };
         }
 
-        int fd = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (fd >= 0) {
-            m_handle = fd;
+        m_handle = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (is_handle_valid()) {
             return SockResult{ SockErr::None, SockOp::Open, 0, 0 };
         }
 
@@ -57,15 +59,19 @@ namespace sock {
         return SockResult{ map_err(err), SockOp::Open, err, 0 };
     }
 
+    bool TCPSocket::is_handle_valid() const noexcept {
+        return m_handle != INVALID_SOCKET;
+    }
+
     void TCPSocket::shutdown() noexcept {
-        if (handle_valid()) {
+        if (is_handle_valid()) {
             ::shutdown(m_handle, SHUT_RDWR);
         }
         m_connected = false;
     }
 
     void TCPSocket::close() noexcept {
-        if (handle_valid()) {
+        if (is_handle_valid()) {
             ::close(m_handle);
         }
         m_handle = INVALID_SOCKET;

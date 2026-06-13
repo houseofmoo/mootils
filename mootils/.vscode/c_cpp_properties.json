@@ -11,7 +11,7 @@
             ],
             "windowsSdkVersion": "10.0.26100.0",
             "intelliSenseMode": "windows-msvc-x64",
-            "defines": ["MOO_LINUX"]
+            "defines": ["MOO_WIN32"]
         }
     ],
     "version": 4

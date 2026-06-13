@@ -51,5 +51,23 @@ namespace sock {
                 return false;
         }
     }
+
+    bool is_fatal_recv_err(int e) noexcept {
+        switch (e) {
+            case WSAECONNRESET:     // peer reset connection
+            case WSAECONNABORTED:   // connection aborted locally/stack
+            case WSAENOTCONN:       // socket is not connected
+            case WSAESHUTDOWN:      // socket has been shut down
+            case WSAENETDOWN:       // network subsystem failed
+            case WSAENETRESET:      // connection broken due to keep-alive/network reset
+            case WSAENETUNREACH:    // network unreachable
+            case WSAEHOSTUNREACH:   // host unreachable
+            case WSAETIMEDOUT:      // connection timed out
+                return true;
+
+            default:
+                return false;
+        }
+    }
 }
 #endif
