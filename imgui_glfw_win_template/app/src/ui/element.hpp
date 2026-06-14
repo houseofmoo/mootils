@@ -9,17 +9,17 @@ namespace ui::elem {
         BaseWindow(const ImGuiIO& io) {
             // set the next window size to the full display size
             ImGui::SetNextWindowSize(io.DisplaySize, ImGuiCond_Always);
-            
+
             // set the next window position to the top-left corner
-            ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always, ImVec2(0, 0));  
+            ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always, ImVec2(0, 0));
             m_drawn = ImGui::Begin(
-                "MainWindow", 
-                nullptr, 
-                ImGuiWindowFlags_NoTitleBar |                          
-                ImGuiWindowFlags_NoResize |                            
-                ImGuiWindowFlags_NoMove |                            
-                ImGuiWindowFlags_NoSavedSettings |                        
-                ImGuiWindowFlags_NoBringToFrontOnFocus | 
+                "MainWindow",
+                nullptr,
+                ImGuiWindowFlags_NoTitleBar |
+                ImGuiWindowFlags_NoResize |
+                ImGuiWindowFlags_NoMove |
+                ImGuiWindowFlags_NoSavedSettings |
+                ImGuiWindowFlags_NoBringToFrontOnFocus |
                 ImGuiWindowFlags_MenuBar
             );
         }
@@ -35,7 +35,7 @@ namespace ui::elem {
 
     };
 
-    class Window {    
+    class Window {
     private:
             bool m_drawn;
 

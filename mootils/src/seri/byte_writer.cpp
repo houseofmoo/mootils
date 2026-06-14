@@ -1,4 +1,4 @@
-#include "mootils/seri/seralize.hpp"
+#include "mootils/seri/serialize.hpp"
 #include <cstring>
 #include <limits>
 #include <bit>

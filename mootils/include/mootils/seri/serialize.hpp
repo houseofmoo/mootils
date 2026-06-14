@@ -10,24 +10,6 @@
 #include "mootils/api.hpp"
 
 namespace seri {
-    // inherit to create your own serializer for any data type that needs to be sent over the wire
-    template <typename T>
-    class Serializer {
-        public:
-        virtual ~Serializer() = default;
-
-        // implement a serialization strategy to convert from obj T into std::bytes.
-        // ByteWriter can be used as a helper for this implementation
-        virtual void serialize(T obj, std::span<std::byte> to_buf) = 0;
-
-        // implement a deserialization strategy to convert from std::bytes into obj T.
-        // ByteReader can be used as a helper for this implementation
-        virtual void deserialize(T obj, std::span<std::byte> from_buf) = 0;
-
-        // return the expected size of obj T when converted to std::bytes
-        virtual std::size_t predict_size(T obj) = 0;
-    };
-
     // reads little-endian byte representation from provided buffer
     class ByteReader {
     private:
@@ -245,4 +227,112 @@ namespace seri {
             return add_size<std::uint8_t>();
         }
     };
+
+//     // inherit to create your own serializer for any data type that needs to be sent over the wire
+//     template <typename T>
+//     class Serializer {
+//         public:
+//         virtual ~Serializer() = default;
+
+//         // implement a serialization strategy to convert from obj T into std::bytes.
+//         // ByteWriter can be used as a helper for this implementation
+//         virtual std::size_t serialize(const T& obj, std::span<std::byte> to_buf) = 0;
+
+//         // implement a deserialization strategy to convert from std::bytes into obj T.
+//         // ByteReader can be used as a helper for this implementation
+//         virtual std::size_t deserialize(T& obj, std::span<std::byte> from_buf) = 0;
+
+//         // return the expected size of obj T when converted to std::bytes
+//         virtual std::size_t predict_size(const T& obj) = 0;
+//     };
+
+//     // allow compile time error if we cannot serialize a value
+//     template <typename T>
+//     constexpr bool always_false = false;
+
+//     template <typename Writer, typename T>
+//     std::size_t serialize_field(Writer& writer, const T& value) {
+//         if  constexpr (std::is_same_v<T, std::uint8_t>) {
+//             return writer.write_u8(value);
+//         } else if constexpr (std::is_same_v<T, std::int8_t>) {
+//             return writer.write_i8(value);
+//         } else if constexpr (std::is_same_v<T, std::byte>) {
+//             return writer.write_byte(value);
+//         } else if constexpr (std::is_same_v<T, bool>) {
+//             return writer.write_bool(value);
+//         } else if constexpr (std::is_same_v<T, std::uint16_t>) {
+//             return writer.write_u16(value);
+//         } else if constexpr (std::is_same_v<T, std::int16_t>) {
+//             return writer.write_i16(value);
+//         } else if constexpr (std::is_same_v<T, std::uint32_t>) {
+//             return writer.write_u32(value);
+//         } else if constexpr (std::is_same_v<T, std::int32_t>) {
+//             return writer.write_i32(value);
+//         } else if constexpr (std::is_same_v<T, std::uint64_t>) {
+//             return writer.write_u64(value);
+//         } else if constexpr (std::is_same_v<T, std::int64_t>) {
+//             return writer.write_i64(value);
+//         } else if constexpr (std::is_same_v<T, float>) {
+//             return writer.write_float(value);
+//         } else if constexpr (std::is_same_v<T, double>) {
+//             return writer.write_double(value);
+//         } else if constexpr (std::is_same_v<T, char>) {
+//             return writer.write_char(value);
+//         } else if constexpr (std::is_same_v<T, std::string>) {
+//             return writer.write_string(value);
+//         } else if constexpr (std::is_same_v<T, std::string_view>) {
+//             return writer.write_string(value);
+//         } else if constexpr (std::is_enum_v<T> && sizeof(T) == 4) {
+//             return writer.write_enum32(value);
+//         } else if constexpr (std::is_enum_v<T> && sizeof(T) == 2) {
+//             return writer.write_enum16(value);
+//         } else if constexpr (std::is_enum_v<T> && sizeof(T) == 1) {
+//             return writer.write_enum8(value);
+//         } else {
+//             static_assert(always_false<T>, "Unsupported serialize field type");
+//         }
+//     }
+
+//     template <typename Reader, typename T>
+//     bool deserialize_field(Reader& reader, const T& value) {
+//         if  constexpr (std::is_same_v<T, std::uint8_t>) {
+//             return reader.read_u8(value);
+//         } else if constexpr (std::is_same_v<T, std::int8_t>) {
+//             return reader.read_i8(value);
+//         } else if constexpr (std::is_same_v<T, std::byte>) {
+//             return reader.read_byte(value);
+//         } else if constexpr (std::is_same_v<T, bool>) {
+//             return reader.read_bool(value);
+//         } else if constexpr (std::is_same_v<T, std::uint16_t>) {
+//             return reader.read_u16(value);
+//         } else if constexpr (std::is_same_v<T, std::int16_t>) {
+//             return reader.read_i16(value);
+//         } else if constexpr (std::is_same_v<T, std::uint32_t>) {
+//             return reader.read_u32(value);
+//         } else if constexpr (std::is_same_v<T, std::int32_t>) {
+//             return reader.read_i32(value);
+//         } else if constexpr (std::is_same_v<T, std::uint64_t>) {
+//             return reader.read_u64(value);
+//         } else if constexpr (std::is_same_v<T, std::int64_t>) {
+//             return reader.read_i64(value);
+//         } else if constexpr (std::is_same_v<T, float>) {
+//             return reader.read_float(value);
+//         } else if constexpr (std::is_same_v<T, double>) {
+//             return reader.read_double(value);
+//         } else if constexpr (std::is_same_v<T, char>) {
+//             return reader.read_char(value);
+//         } else if constexpr (std::is_same_v<T, std::string>) {
+//             return reader.read_string(value);
+//         } else if constexpr (std::is_same_v<T, std::string_view>) {
+//             return reader.read_string(value);
+//         } else if constexpr (std::is_enum_v<T> && sizeof(T) == 4) {
+//             return reader.read_enum32(value);
+//         } else if constexpr (std::is_enum_v<T> && sizeof(T) == 2) {
+//             return reader.read_enum16(value);
+//         } else if constexpr (std::is_enum_v<T> && sizeof(T) == 1) {
+//             return reader.read_enum8(value);
+//         } else {
+//             static_assert(always_false<T>, "Unsupported serialize field type");
+//         }
+//     }
 }
