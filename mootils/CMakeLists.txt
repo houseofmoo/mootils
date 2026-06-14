@@ -74,7 +74,8 @@ elseif(MOO_LOG_LEVEL STREQUAL "None")
     message(STATUS "Log level set to NONE")
     set(MOO_LOG_LEVEL_VALUE 99)
 else()
-    message(FATAL_ERROR " Invalid LOG_LEVEL: ${LOG_LEVEL}. Use Debug, Info, Warning, Error, or None")
+    message(STATUS "Log level set to WARNING")
+    set(MOO_LOG_LEVEL_VALUE 2)
 endif()
 
 # macro defs
@@ -92,12 +93,12 @@ target_compile_definitions(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
     PRIVATE
         #platform independent sources
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/root.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/arena.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_buffer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/cyclic_byte_buffer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_reader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte/byte_writer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte_reader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte_writer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sock/utils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/shm/shm.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/print/log_q.cpp

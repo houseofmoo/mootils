@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <mutex>
+#include <span>
 
 namespace sock {
     TCPClient::TCPClient() : TCPSocket() {}
@@ -94,6 +95,10 @@ namespace sock {
         return SockResult{ map_err(err), SockOp::Send, err, 0 };
     }
 
+    SockResult TCPClient::send(const std::span<std::byte> blob) {
+        return send(blob.data(), blob.size_bytes());
+    }
+
     SockResult TCPClient::send_all(const void* data, const std::size_t size) {
         if (!is_connected()) {
             return SockResult{ SockErr::NotConnected, SockOp::Send, 0, 0 };
@@ -150,6 +155,10 @@ namespace sock {
         return SockResult{ SockErr::None, SockOp::Send, 0, static_cast<int>(total) };
     }
 
+    SockResult TCPClient::send_all(const std::span<std::byte> blob) {
+        return send_all(blob.data(), blob.size_bytes());
+    }
+
     SockResult TCPClient::recv(void* data, const std::size_t size) {
         if (!is_connected()) {
             return SockResult{ SockErr::NotConnected, SockOp::Recv, 0, 0 };
@@ -190,6 +199,10 @@ namespace sock {
         }
 
         return SockResult{ map_err(err), SockOp::Recv, err, 0 };
+    }
+
+    SockResult TCPClient::recv(const std::span<std::byte> blob) {
+        return recv(blob.data(), blob.size_bytes());
     }
 
     SockResult TCPClient::recv_all(void* data, const std::size_t size) {
@@ -258,6 +271,10 @@ namespace sock {
             0,
             static_cast<int>(total)
         };
+    }
+
+    SockResult TCPClient::recv_all(const std::span<std::byte> blob) {
+        return recv_all(blob.data(), blob.size_bytes());
     }
 }
 #endif

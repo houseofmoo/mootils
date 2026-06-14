@@ -4,6 +4,7 @@
 #include <memory>
 #include <cstdint>
 #include <cstddef>
+#include <span>
 #include "socket_result.hpp"
 #include "socket_defs.hpp"
 #include "mootils/api.hpp"
@@ -52,9 +53,13 @@ namespace sock {
 
             MOOTILS_API [[nodiscard]] SockResult connect(const char* ip, uint16_t port);
             MOOTILS_API [[nodiscard]] SockResult send(const void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult send(const std::span<std::byte> blob);
             MOOTILS_API [[nodiscard]] SockResult send_all(const void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult send_all(const std::span<std::byte> blob);
             MOOTILS_API [[nodiscard]] SockResult recv(void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult recv(const std::span<std::byte> blob);
             MOOTILS_API [[nodiscard]] SockResult recv_all(void* data, const std::size_t size);
+            MOOTILS_API [[nodiscard]] SockResult recv_all(const std::span<std::byte> blob);
     };
 
     // TCPServer will return std::shared_ptr<TCPClient> from accept()

@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <vector>
 #include <atomic>
+#include <span>
 #include "mootils/api.hpp"
 
 namespace shm {
@@ -112,8 +113,10 @@ namespace shm {
             // shared implementation
             MOOTILS_API void memset(std::size_t offset, int32_t val, std::size_t bytes);
             MOOTILS_API std::size_t total_size() const noexcept;
-            MOOTILS_API [[nodiscard]] ShmResult read(void* buf, const std::size_t size, const std::size_t offset) const noexcept;
-            MOOTILS_API [[nodiscard]] ShmResult write(const void* buf, const std::size_t size, const std::size_t offset) noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult read(void* to_buf, const std::size_t read_size, const std::size_t offset_into) const noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult read(const std::span<std::byte> to_blob, const std::size_t offset_into) const noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult write(const void* from_buf, const std::size_t write_size, const std::size_t offset_into) noexcept;
+            MOOTILS_API [[nodiscard]] ShmResult write(const std::span<std::byte> from_blob, const std::size_t offset_into) noexcept;
 
             template <typename T>
             T* as(std::size_t offset) const {

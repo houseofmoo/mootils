@@ -1,9 +1,9 @@
-#include "mootils/seri/byte/byte_reader.hpp"
+#include "mootils/seri/seralize.hpp"
 
 #include <bit>
 #include <cstring>
 
-namespace seri::byte {
+namespace seri {
     ByteReader::ByteReader(std::span<const std::byte> buf)
         : m_buf{buf}, m_offset{0} {}
 

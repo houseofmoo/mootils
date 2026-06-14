@@ -1,27 +1,23 @@
-#include "mootils/seri/byte/byte_writer.hpp"
+#include "mootils/seri/seralize.hpp"
 #include <cstring>
 #include <limits>
 #include <bit>
 
-namespace seri::byte {
+namespace seri {
     ByteWriter::ByteWriter(std::span<std::byte> buf) : m_buf{buf}, m_offset{0} {}
 
-    [[nodiscard]]
     std::size_t ByteWriter::size() const noexcept {
         return m_buf.size();
     }
 
-    [[nodiscard]]
     std::size_t ByteWriter::used() const noexcept {
         return m_offset;
     }
 
-    [[nodiscard]]
     std::size_t ByteWriter::space_available() const noexcept {
         return m_buf.size() - m_offset;
     }
 
-    [[nodiscard]]
     std::span<std::byte> ByteWriter::written() const noexcept {
         return m_buf.subspan(0, m_offset);
     }
