@@ -19,6 +19,7 @@ target_sources(${PROJECT_NAME}
         src/imgui_widgets.cpp
         src/imgui_draw.cpp
         src/imgui_demo.cpp
+        src/imgui_stdlib.cpp
         src/imgui_tables.cpp
         src/backends/imgui_impl_glfw.cpp
         src/backends/imgui_impl_opengl3.cpp

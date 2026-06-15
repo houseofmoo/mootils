@@ -89,7 +89,7 @@ cmake --build --preset "$PRESET" --parallel
 echo
 echo "Build completed successfully for preset \"$PRESET\""
 
-# if [[ "$RUN_AFTER_BUILD" == "true" ]]; then
+# if [[ "$RUN" == "true" ]]; then
 #   echo
 #   echo "Running the built executable..."
 #   if [[ -x "./run.sh" ]]; then

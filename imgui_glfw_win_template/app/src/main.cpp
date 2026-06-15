@@ -2,11 +2,12 @@
 #include <iostream>
 #include <cassert>
 #include "imgui/imgui.h"
+#include "imgui/imgui_stdlib.h"
 
 #include "context/ui_context.hpp"
 #include "ui/style.hpp"
 #include "ui/alignment.hpp"
-#include "ui/element.hpp"
+#include "ui/window.hpp"
 
 void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     static bool show_demo_window = false;
@@ -27,7 +28,7 @@ void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     // child element example
     {
         //ui::style::StyleFont font(context.get_font(FontKind::Roboto));
-        ui::elem::Child child("demo_panel", ImVec2(300, 100));
+        ui::window::Child child("demo_panel", ImVec2(300, 100));
         ImGui::Checkbox("Demo Window", &show_demo_window);
     }
 
@@ -35,7 +36,7 @@ void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     {
         //ui::style::StyleFont font(context.get_font(FontKind::Consolas));
         ui::style::StyleColor color(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 1.0f, 1.0f));
-        ui::elem::Child child("consolas_panel", ImVec2(300, 100));
+        ui::window::Child child("consolas_panel", ImVec2(300, 100));
         ImGui::Text("this is a thing");
     }
 
@@ -68,7 +69,7 @@ int main() {
             if (!context.begin_frame()) { continue; }
 
             {
-                ui::elem::BaseWindow background{io};
+                ui::window::BaseWindow background{io};
                 draw_ui(context, io);
             }
 
