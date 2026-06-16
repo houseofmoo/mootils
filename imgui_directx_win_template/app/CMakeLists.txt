@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(app LANGUAGES CXX)
 
-add_executable(app WIN32)
+add_executable(app) # WIN32)
 
 set_target_properties(app PROPERTIES
     C_STANDARD 11
@@ -29,9 +29,9 @@ target_compile_definitions(app PRIVATE
 )
 
 if(MSVC)
-    target_compile_options(app PRIVATE
-        /W4 /WX /permissive- /Zc:__cplusplus /Zc:preprocessor /EHsc
-    )
+    # target_compile_options(app PRIVATE
+    #     /W4 /WX /permissive- /Zc:__cplusplus /Zc:preprocessor /EHsc
+    # )
 else()
     target_compile_options(app PRIVATE
         -Wall -Wextra -Wpedantic -Werror
