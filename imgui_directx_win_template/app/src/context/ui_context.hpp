@@ -21,6 +21,12 @@ struct UiConfig {
 };
 
 class UiContext {
+private:
+    struct Impl;
+    std::unique_ptr<Impl> m_impl;
+    using FontsArray = EnumArray<FontKind, ImFont*, static_cast<std::size_t>(FontKind::COUNT)>;
+    FontsArray m_fonts;
+
 public:
     explicit UiContext(const UiConfig& config);
     ~UiContext();
@@ -38,10 +44,5 @@ public:
     bool begin_frame();
     void end_frame();
     void load_fonts();
-
-private:
-    struct Impl;
-    std::unique_ptr<Impl> m_impl;
-    using FontsArray = EnumArray<FontKind, ImFont*, static_cast<std::size_t>(FontKind::COUNT)>;
-    FontsArray m_fonts;
+    ImFont* get_font(FontKind kind);
 };

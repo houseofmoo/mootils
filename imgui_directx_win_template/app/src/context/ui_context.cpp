@@ -682,6 +682,10 @@ bool UiContext::begin_frame() {
     return m_impl->begin_frame();
 }
 
+void UiContext::end_frame() {
+    m_impl->end_frame();
+}
+
 void UiContext::load_fonts() {
     m_fonts[FontKind::Roboto] = io().Fonts->AddFontFromFileTTF(".\\assets\\fonts\\Roboto-SemiBold.ttf", 16.0f);
     assert( m_fonts[FontKind::Roboto] != nullptr);
@@ -689,6 +693,6 @@ void UiContext::load_fonts() {
     assert( m_fonts[FontKind::Consolas] != nullptr);
 }
 
-void UiContext::end_frame() {
-    m_impl->end_frame();
+ImFont* UiContext::get_font(FontKind kind) {
+    return m_fonts[kind];
 }

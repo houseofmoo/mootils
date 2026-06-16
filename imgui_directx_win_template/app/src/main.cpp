@@ -9,7 +9,7 @@
 
 #include <string>
 
-void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
+void draw_ui(UiContext& context, ImGuiIO& io) {
     static bool show_demo_window = false;
     static std::string text = "Edit me";
     static float value = 0.5f;
@@ -28,6 +28,7 @@ void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     }
 
     {
+        ui::style::StyleFont font(context.get_font(FontKind::Roboto));
         ui::window::Child child("demo_panel", ImVec2(360, 140));
         ImGui::TextUnformatted("Win32 + DirectX Dear ImGui starter");
 #if defined(IMGUI_USE_DX9)
@@ -45,6 +46,7 @@ void draw_ui(UiContext& /*context*/, ImGuiIO& io) {
     }
 
     {
+        ui::style::StyleFont font(context.get_font(FontKind::Consolas));
         constexpr int height = 16;
         ui::align::NextItemBottomY(static_cast<float>(height));
         ImGui::Text("FPS: %.1f", static_cast<double>(io.Framerate));
