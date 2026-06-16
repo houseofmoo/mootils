@@ -49,4 +49,5 @@ out/
 imgui_glfw_win_linux_template/build/
 imgui_glfw_win_template/build/
 mootils/build
+imgui_direcx_win_template/build
 .vs
