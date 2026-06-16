@@ -1,0 +1,64 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "__base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "IMGUI_DIRECTX_VERSION": "11"
+      }
+    },
+    {
+      "name": "__windows",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "__debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "__release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "__gnu-windows",
+      "hidden": true,
+      "inherits": ["__base", "__windows"],
+      "generator": "MinGW Makefiles"
+    },
+    {
+      "name": "__msvc-windows",
+      "hidden": true,
+      "inherits": ["__base", "__windows"],
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64"
+    },
+    { "name": "win-gnu-debug", "inherits": ["__gnu-windows", "__debug"], "displayName": "GNU Windows Debug DX11" },
+    { "name": "win-gnu-release", "inherits": ["__gnu-windows", "__release"], "displayName": "GNU Windows Release DX11" },
+    { "name": "win-msvc-debug", "inherits": ["__msvc-windows", "__debug"], "displayName": "MSVC Windows Debug DX11" },
+    { "name": "win-msvc-release", "inherits": ["__msvc-windows", "__release"], "displayName": "MSVC Windows Release DX11" }
+  ],
+  "buildPresets": [
+    { "name": "win-gnu-debug", "configurePreset": "win-gnu-debug", "jobs": 0 },
+    { "name": "win-gnu-release", "configurePreset": "win-gnu-release", "jobs": 0 },
+    { "name": "win-msvc-debug", "configurePreset": "win-msvc-debug", "configuration": "Debug", "jobs": 0 },
+    { "name": "win-msvc-release", "configurePreset": "win-msvc-release", "configuration": "Release", "jobs": 0 }
+  ]
+}
