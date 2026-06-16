@@ -29,9 +29,9 @@ target_compile_definitions(app PRIVATE
 )
 
 if(MSVC)
-    # target_compile_options(app PRIVATE
-    #     /W4 /WX /permissive- /Zc:__cplusplus /Zc:preprocessor /EHsc
-    # )
+    target_compile_options(app PRIVATE
+        /W4 /WX /permissive- /Zc:__cplusplus /Zc:preprocessor /EHsc
+    )
 else()
     target_compile_options(app PRIVATE
         -Wall -Wextra -Wpedantic -Werror
