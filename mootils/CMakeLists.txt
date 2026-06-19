@@ -101,6 +101,7 @@ target_sources(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte_writer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sock/utils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/shm/shm.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/str/str_utils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/print/log_q.cpp
 
         # windows only

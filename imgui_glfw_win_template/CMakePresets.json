@@ -51,55 +51,17 @@
       "architecture": "x64"
     },
 
-    {
-      "name": "win-gnu-debug",
-      "inherits": ["__gnu-windows", "__debug"],
-      "displayName": "GNU Windows Debug"
-    },
-    {
-      "name": "win-gnu-release",
-      "inherits": ["__gnu-windows", "__release"],
-      "displayName": "GNU Windows Release"
-    },
+    { "name": "win-gnu-debug", "inherits": ["__gnu-windows", "__debug"], "displayName": "GNU Windows Debug" },
+    { "name": "win-gnu-release", "inherits": ["__gnu-windows", "__release"], "displayName": "GNU Windows Release" },
 
-    {
-      "name": "win-msvc-debug",
-      "inherits": ["__msvc-windows", "__debug"],
-      "displayName": "MSVC Windows Debug"
-    },
-    {
-      "name": "win-msvc-release",
-      "inherits": ["__msvc-windows", "__release"],
-      "displayName": "MSVC Windows Release"
-    }
+    { "name": "win-msvc-debug", "inherits": ["__msvc-windows", "__debug"], "displayName": "MSVC Windows Debug" },
+    { "name": "win-msvc-release", "inherits": ["__msvc-windows", "__release"], "displayName": "MSVC Windows Release" }
   ],
   "buildPresets": [
-    {
-      "name": "win-gnu-debug",
-      "displayName": "GNU Windows Debug",
-      "configurePreset": "win-gnu-debug",
-      "jobs": 0
-    },
-    {
-      "name": "win-gnu-release",
-      "displayName": "GNU Windows Release",
-      "configurePreset": "win-gnu-release",
-      "jobs": 0
-    },
+    { "name": "win-gnu-debug", "displayName": "GNU Windows Debug", "configurePreset": "win-gnu-debug", "jobs": 0 },
+    { "name": "win-gnu-release", "displayName": "GNU Windows Release", "configurePreset": "win-gnu-release", "jobs": 0 },
 
-    {
-      "name": "win-msvc-debug",
-      "displayName": "MSVC Windows Debug",
-      "configurePreset": "win-msvc-debug",
-      "configuration": "Debug",
-      "jobs": 0
-    },
-    {
-      "name": "win-msvc-release",
-      "displayName": "MSVC Windows Release",
-      "configurePreset": "win-msvc-release",
-      "configuration": "Release",
-      "jobs": 0
-    }
+    { "name": "win-msvc-debug", "displayName": "MSVC Windows Debug", "configurePreset": "win-msvc-debug", "configuration": "Debug", "jobs": 0 },
+    { "name": "win-msvc-release", "displayName": "MSVC Windows Release", "configurePreset": "win-msvc-release", "configuration": "Release", "jobs": 0 }
   ]
 }

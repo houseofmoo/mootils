@@ -17,6 +17,7 @@
 #include "mootils/containers/enum_array.hpp"
 #include "mootils/mem/arena.hpp"
 #include "mootils/seri/serialize.hpp"
+#include "mootils/str/str_utils.hpp"
 
 void do_nothing() {
     msg::SPSCQueue<int> channel;
