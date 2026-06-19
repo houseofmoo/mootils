@@ -3,15 +3,75 @@
 #include <algorithm>
 #include <charconv>
 #include <cctype>
+#include <cstdint>
 #include <stdexcept>
+#include <string_view>
 
 namespace str {
+    namespace {
+        template <typename T>
+        bool try_to_int(std::string_view str, T& out) noexcept {
+            T value{};
+
+            const char* begin = str.data();
+            const char* end = str.data() + str.size();
+
+            const auto result = std::from_chars(begin, end, value);
+
+            if (result.ec != std::errc{} || result.ptr != end) {
+                return false;
+            }
+
+            out = value;
+            return true;
+        }
+
+        template <typename T>
+        T to_int(std::string_view str, const char* error_msg) {
+            T value{};
+
+            if (!try_to_int(str, value)) {
+                throw std::invalid_argument{error_msg};
+            }
+
+            return value;
+        }
+    }
+
+    bool char_equals_ignore_case(char a, char b) {
+        const auto ua = static_cast<unsigned char>(a);
+        const auto ub = static_cast<unsigned char>(b);
+        return std::tolower(ua) == std::tolower(ub);
+    }
+
     bool contains(std::string_view str, std::string_view substr) {
         return str.find(substr) != std::string_view::npos;
     }
 
     bool contains(std::string_view str, char c) {
         return str.find(c) != std::string_view::npos;
+    }
+
+    bool contains_ignore_case(std::string_view str, std::string_view substr) {
+        if (substr.empty()) {
+            return true;
+        }
+
+        if (substr.size() > str.size()) {
+            return false;
+        }
+
+        const auto it = std::search(
+            str.begin(),
+            str.end(),
+            substr.begin(),
+            substr.end(),
+            [](char a, char b) {
+                return char_equals_ignore_case(a, b);
+            }
+        );
+
+        return it != str.end();
     }
 
     bool is_empty_or_whitespace(std::string_view str) {
@@ -24,7 +84,7 @@ namespace str {
         );
     }
 
-    std::vector<std::string> split(const std::string& str, char delim, bool remove_empty) {
+    std::vector<std::string> split(std::string_view str, char delim, SplitEmpty remove_empty) {
         std::vector<std::string> out;
 
         auto views = split_view(std::string_view{str}, delim, remove_empty);
@@ -37,7 +97,7 @@ namespace str {
         return out;
     }
 
-    std::vector<std::string> split(const std::string& str, std::string_view delim, bool remove_empty) {
+    std::vector<std::string> split(std::string_view str, std::string_view delim, SplitEmpty remove_empty) {
         std::vector<std::string> out;
 
         auto views = split_view(std::string_view{str}, delim, remove_empty);
@@ -50,7 +110,7 @@ namespace str {
         return out;
     }
 
-    std::vector<std::string_view> split_view(std::string_view str, char delim, bool remove_empty) {
+    std::vector<std::string_view> split_view(std::string_view str, char delim, SplitEmpty remove_empty) {
         std::vector<std::string_view> out;
         std::size_t start = 0;
 
@@ -61,7 +121,7 @@ namespace str {
 
             if (len > 0) {
                 auto temp = str.substr(start, len);
-                if (!remove_empty) {
+                if (remove_empty == SplitEmpty::Keep) {
                     // dont care about empty, insert it anyways
                     out.emplace_back(temp);
                 } else {
@@ -72,7 +132,7 @@ namespace str {
                 }
             } else {
                 // found a delim with nothing, insert empty item if option selected
-                if (!remove_empty) {
+                if (remove_empty == SplitEmpty::Keep) {
                     out.emplace_back("");
                 }
             }
@@ -87,7 +147,7 @@ namespace str {
         return out;
     }
 
-    std::vector<std::string_view> split_view(std::string_view str, std::string_view delim, bool remove_empty) {
+    std::vector<std::string_view> split_view(std::string_view str, std::string_view delim, SplitEmpty remove_empty) {
         std::vector<std::string_view> out;
 
         if (delim.empty()) {
@@ -106,7 +166,7 @@ namespace str {
 
             if (len > 0) {
                 auto temp = str.substr(start, len);
-                if (!remove_empty) {
+                if (remove_empty == SplitEmpty::Keep) {
                     // dont care about empty, insert it anyways
                     out.emplace_back(temp);
                 } else {
@@ -117,7 +177,7 @@ namespace str {
                 }
             } else {
                 // found a delim with nothing, insert empty item if option selected
-                if (!remove_empty) {
+                if (remove_empty == SplitEmpty::Keep) {
                     out.emplace_back("");
                 }
             }
@@ -133,33 +193,35 @@ namespace str {
     }
 
     std::uint32_t to_u32(std::string_view str) {
-        std::uint32_t value{};
-
-        const char* begin = str.data();
-        const char* end = str.data() + str.size();
-
-        auto result = std::from_chars(begin, end, value);
-
-        if (result.ec != std::errc{} || result.ptr != end) {
-            throw std::invalid_argument{"invalid uint32 string"};
-        }
-
-        return value;
+        return to_int<std::uint32_t>(str, "invalid uint32 string");
     }
 
     std::int32_t to_i32(std::string_view str) {
-        std::int32_t value{};
+        return to_int<std::int32_t>(str, "invalid int32 string");
+    }
 
-        const char* begin = str.data();
-        const char* end = str.data() + str.size();
+    bool try_to_u32(std::string_view str, std::uint32_t& out) noexcept {
+        return try_to_int(str, out);
+    }
 
-        auto result = std::from_chars(begin, end, value);
+    bool try_to_i32(std::string_view str, std::int32_t& out) noexcept {
+        return try_to_int(str, out);
+    }
 
-        if (result.ec != std::errc{} || result.ptr != end) {
-            throw std::invalid_argument{"invalid int32 string"};
-        }
+    std::uint64_t to_u64(std::string_view str) {
+        return to_int<std::uint64_t>(str, "invalid uint64 string");
+    }
 
-        return value;
+    std::int64_t to_i64(std::string_view str) {
+        return to_int<std::int64_t>(str, "invalid int64 string");
+    }
+
+    bool try_to_u64(std::string_view str, std::uint64_t& out) noexcept {
+        return try_to_int(str, out);
+    }
+
+    bool try_to_i64(std::string_view str, std::int64_t& out) noexcept {
+        return try_to_int(str, out);
     }
 
     std::string_view trim_left_view(std::string_view str) {

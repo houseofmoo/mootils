@@ -6,19 +6,33 @@
 #include <vector>
 
 namespace str {
+    enum class SplitEmpty {
+        Keep,
+        Remove
+    };
+
+    bool char_equals_ignore_case(char a, char b);
     bool contains(std::string_view str, std::string_view substr);
     bool contains(std::string_view str, char c);
+    bool contains_ignore_case(std::string_view str, std::string_view substr);
 
     bool is_empty_or_whitespace(std::string_view str);
 
-    std::vector<std::string> split(const std::string& str, char delim, bool remove_empty = true);
-    std::vector<std::string> split(const std::string& str, std::string_view delim, bool remove_empty = true);
+    std::vector<std::string> split(std::string_view str, char delim, SplitEmpty remove_empty = SplitEmpty::Remove);
+    std::vector<std::string> split(std::string_view str, std::string_view delim, SplitEmpty remove_empty = SplitEmpty::Remove);
 
-    std::vector<std::string_view> split_view(std::string_view str, char delim, bool remove_empty = true);
-    std::vector<std::string_view> split_view(std::string_view str, std::string_view delim, bool remove_empty = true);
+    std::vector<std::string_view> split_view(std::string_view str, char delim, SplitEmpty remove_empty = SplitEmpty::Remove);
+    std::vector<std::string_view> split_view(std::string_view str, std::string_view delim, SplitEmpty remove_empty = SplitEmpty::Remove);
 
     std::uint32_t to_u32(std::string_view str);
     std::int32_t to_i32(std::string_view str);
+    bool try_to_u32(std::string_view str, std::uint32_t& out) noexcept;
+    bool try_to_i32(std::string_view str, std::int32_t& out) noexcept;
+
+    std::uint64_t to_u64(std::string_view str);
+    std::int64_t to_i64(std::string_view str);
+    bool try_to_u64(std::string_view str, std::uint64_t& out) noexcept;
+    bool try_to_i64(std::string_view str, std::int64_t& out) noexcept;
 
     std::string_view trim_left_view(std::string_view str);
     std::string_view trim_right_view(std::string_view str);
