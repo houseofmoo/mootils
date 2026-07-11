@@ -96,9 +96,9 @@ target_sources(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/arena.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_buffer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_reader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/byte_writer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/mem/cyclic_byte_buffer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte_reader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/seri/byte_writer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sock/utils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/shm/shm.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/str/str_utils.cpp

@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <thread>
 #include "mootils/sock/socket_result.hpp"
+#include "mootils/sock/tcp_socket.hpp"
 
 namespace sock {
     bool recv_exact(std::shared_ptr<sock::TCPClient> sock, void* buf, std::size_t size) {
@@ -24,6 +25,10 @@ namespace sock {
             default: return false;
         }
         return true;
+    }
+
+    bool recv_exact(std::shared_ptr<sock::TCPClient> sock, std::span<std::byte> buf) {
+        return recv_exact(sock, buf.data(), buf.size());
     }
 
     bool drain(std::shared_ptr<sock::TCPClient> sock, std::size_t size) {

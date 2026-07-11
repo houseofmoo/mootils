@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace seri {
+namespace mem {
     namespace {
         template <typename T>
         inline constexpr bool is_byte_swappable_integral_v =

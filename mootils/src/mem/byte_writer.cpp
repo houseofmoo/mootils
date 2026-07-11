@@ -1,9 +1,9 @@
-#include "mootils/seri/serialize.hpp"
+#include "mootils/mem/serializer.hpp"
 #include <cstring>
 #include <limits>
 #include <bit>
 
-namespace seri {
+namespace mem {
     ByteWriter::ByteWriter(std::span<std::byte> buf) : m_buf{buf}, m_offset{0} {}
 
     std::size_t ByteWriter::size() const noexcept {

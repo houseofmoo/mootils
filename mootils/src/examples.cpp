@@ -16,9 +16,10 @@
 #include "mootils/macros.hpp"
 #include "mootils/containers/enum_array.hpp"
 #include "mootils/mem/arena.hpp"
-#include "mootils/seri/serialize.hpp"
-#include "mootils/seri/byte_swap.hpp"
+#include "mootils/mem/serializer.hpp"
+#include "mootils/mem/byte_swap.hpp"
 #include "mootils/str/str_utils.hpp"
+#include "mootils/mem/ez_serialize.hpp"
 
 void do_nothing() {
     msg::SPSCQueue<int> channel;

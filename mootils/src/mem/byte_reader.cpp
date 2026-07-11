@@ -1,9 +1,9 @@
-#include "mootils/seri/serialize.hpp"
+#include "mootils/mem/serializer.hpp"
 
 #include <bit>
 #include <cstring>
 
-namespace seri {
+namespace mem {
     ByteReader::ByteReader(std::span<const std::byte> buf)
         : m_buf{buf}, m_offset{0} {}
 
