@@ -25,7 +25,7 @@ namespace ui::window {
         }
 
         ~BaseWindow() {
-            if (m_drawn) ImGui::End();
+            ImGui::End();
         }
 
         BaseWindow(const BaseWindow&) = delete;
@@ -45,7 +45,7 @@ namespace ui::window {
         }
 
         ~Window() {
-            if (m_drawn) ImGui::End();
+            ImGui::End();
         }
 
         Window(const Window&) = delete;
@@ -63,7 +63,7 @@ namespace ui::window {
         }
 
         ~Child() {
-            if (m_drawn) ImGui::EndChild();
+            ImGui::EndChild();
         }
 
         Child(const Child&) = delete;
